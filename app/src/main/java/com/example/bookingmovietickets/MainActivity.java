@@ -1,0 +1,48 @@
+package com.example.bookingmovietickets;
+
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.os.Bundle;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        TextView tvBannerTitle = findViewById(R.id.tvBannerTitle);
+        if (tvBannerTitle != null) {
+            tvBannerTitle.post(() -> {
+                int topColor = ContextCompat.getColor(this, R.color.lightblue);
+                int bottomColor = ContextCompat.getColor(this, R.color.drakblue);
+                float height = tvBannerTitle.getPaint().descent() - tvBannerTitle.getPaint().ascent();
+                if (height <= 0) {
+                    height = tvBannerTitle.getHeight();
+                }
+                Shader textShader = new LinearGradient(
+                        0, 0, 0, height,
+                        new int[]{topColor, topColor, bottomColor, bottomColor},
+                        new float[]{0.0f, 0.48f, 0.52f, 1.0f},
+                        Shader.TileMode.CLAMP
+                );
+                tvBannerTitle.getPaint().setShader(textShader);
+                tvBannerTitle.invalidate();
+            });
+        }
+    }
+}

@@ -1,0 +1,229 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <!-- Ảnh Banner Phim -->
+    <ImageView
+        android:id="@+id/imgBanner"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_background_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Chữ Booking Movie Tickets màu đỏ với hiệu ứng đổ bóng đen để nổi bật trên banner -->
+    <TextView
+        android:id="@+id/tvBannerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="12dp"
+
+        android:fontFamily="sans-serif-condensed"
+        android:text="BOOKING MOVIE TICKETS"
+        android:textColor="#FFFFFF"
+        android:textSize="23sp"
+        android:textStyle="bold"
+        android:letterSpacing="0.04"
+
+        android:shadowColor="#CC000000"
+        android:shadowDx="0"
+        android:shadowDy="2"
+        android:shadowRadius="3"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Nhóm chứa Logo và CQS Cinema với gạch chân kép -->
+    <LinearLayout
+        android:id="@+id/llLogoContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgBanner">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:src="@drawable/ic_logo" />
+
+        <!-- Container chữ CQS Cinema + Gạch chân kép -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:text="CQS "
+                    android:textColor="#B71C1C"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="serif"
+                    android:text="Cinema"
+                    android:textColor="#000000"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Đường gạch chân kép bên dưới CQS Cinema -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.1dp"
+                android:layout_marginTop="1dp"
+                android:background="#000000" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:layout_marginTop="2dp"
+                android:background="#000000" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Tiêu đề Login -->
+    <TextView
+        android:id="@+id/tvLoginTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:text="Login"
+        android:textColor="#707070"
+        android:textSize="58sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llLogoContainer" />
+
+    <!-- Subtitle -->
+    <TextView
+        android:id="@+id/tvSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Please login to continue with your account"
+        android:textColor="#9E9E9E"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
+
+    <!-- Ô nhập Email Address -->
+    <EditText
+        android:id="@+id/edtEmail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#B0B0B0"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
+        android:paddingBottom="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
+        app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+
+    <!-- Ô nhập Password -->
+    <EditText
+        android:id="@+id/edtPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#B0B0B0"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingBottom="12dp"
+        android:textColor="#000000"
+        android:textColorHint="#B0B0B0"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
+        app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+
+    <!-- Quên mật khẩu -->
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="serif"
+        android:text="Forgot Password?"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/edtPassword"
+        app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+
+    <!-- Nút LOGIN Đỏ -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnLogin"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="#B71C1C"
+        android:fontFamily="serif"
+        android:text="LOGIN"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:cornerRadius="28dp"
+        app:layout_constraintEnd_toEndOf="@id/edtPassword"
+        app:layout_constraintStart_toStartOf="@id/edtPassword"
+        app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
+
+    <!-- Dòng chữ Đăng ký -->
+    <LinearLayout
+        android:id="@+id/llSignUp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnLogin">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don't have an account? "
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:textColor="#B71C1C"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
