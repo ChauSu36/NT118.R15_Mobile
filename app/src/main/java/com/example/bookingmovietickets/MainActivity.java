@@ -1,8 +1,10 @@
 package com.example.bookingmovietickets;
 
+import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -42,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
                 );
                 tvBannerTitle.getPaint().setShader(textShader);
                 tvBannerTitle.invalidate();
+            });
+        }
+        LinearLayout llSignUp = findViewById(R.id.llSignUp);
+        if (llSignUp != null) {
+            llSignUp.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
+                startActivity(intent);
             });
         }
     }

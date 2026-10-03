@@ -107,109 +107,116 @@
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Tiêu đề Login -->
+    <!-- Tiêu đề Sign Up -->
     <TextView
-        android:id="@+id/tvLoginTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
-        android:text="Login"
-        android:textColor="#707070"
-        android:textSize="58sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/llLogoContainer" />
-
+    android:id="@+id/tvSignUpTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="32dp"
+    android:layout_marginTop="28dp"
+    android:text="Sign Up"
+    android:textColor="#707070"
+    android:textSize="58sp"
+    android:textStyle="bold"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/llLogoContainer" />
     <!-- Subtitle -->
     <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Please login to continue with your account"
-        android:textColor="#9E9E9E"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
-        app:layout_constraintTop_toBottomOf="@id/tvLoginTitle" />
+    android:id="@+id/tvSubtitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="Please create an account"
+    android:textColor="#9E9E9E"
+    android:textSize="14sp"
+    app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
+    app:layout_constraintTop_toBottomOf="@id/tvSignUpTitle" />
 
     <!-- Ô nhập Email Address -->
     <EditText
-        android:id="@+id/edtEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="#B0B0B0"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:paddingBottom="12dp"
-        android:textColor="#000000"
-        android:textColorHint="#B0B0B0"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+    android:id="@+id/edtEmail"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="32dp"
+    android:layout_marginTop="32dp"
+    android:backgroundTint="#B0B0B0"
+    android:hint="Email Address"
+    android:inputType="textEmailAddress"
+    android:paddingBottom="12dp"
+    android:textColor="#B0B0B0"
+    android:textColorHint="#B0B0B0"
+    android:textSize="14sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
+    app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
 
     <!-- Ô nhập Password -->
     <EditText
-        android:id="@+id/edtPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#B0B0B0"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:paddingBottom="12dp"
-        android:textColor="#000000"
-        android:textColorHint="#B0B0B0"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
-        app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+    android:id="@+id/edtPassword"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="32dp"
+    android:layout_marginTop="16dp"
+    android:backgroundTint="#B0B0B0"
+    android:hint="Password"
+    android:inputType="textPassword"
+    android:paddingBottom="12dp"
+    android:textColor="#000000"
+    android:textColorHint="#B0B0B0"
+    android:textSize="14sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
+    app:layout_constraintTop_toBottomOf="@id/edtEmail" />
 
-    <!-- Quên mật khẩu -->
-    <TextView
-        android:id="@+id/tvForgotPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:fontFamily="serif"
-        android:text="Forgot Password?"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+    <!-- Ô nhập Confirm Password -->
+    <EditText
+    android:id="@+id/edtConfirmPassword"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="32dp"
+    android:layout_marginTop="16dp"
+    android:backgroundTint="#B0B0B0"
+    android:hint="Confirm Password"
+    android:inputType="textPassword"
+    android:paddingBottom="12dp"
+    android:textColor="#000000"
+    android:textColorHint="#B0B0B0"
+    android:textSize="14sp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
+    app:layout_constraintTop_toBottomOf="@id/edtPassword" />
 
-    <!-- Nút LOGIN Đỏ -->
+    <!-- Nút Sign Up Đỏ -->
+
+    <!-- Dòng chữ Login -->
+
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSignUp"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:backgroundTint="#B71C1C"
         android:fontFamily="serif"
-        android:text="LOGIN"
+        android:text="Sign Up"
         android:textColor="#FFFFFF"
         android:textSize="22sp"
         android:textStyle="bold"
         app:cornerRadius="28dp"
-        app:layout_constraintEnd_toEndOf="@id/edtPassword"
-        app:layout_constraintStart_toStartOf="@id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
+        app:layout_constraintEnd_toEndOf="@id/edtConfirmPassword"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/edtConfirmPassword"
+        app:layout_constraintTop_toBottomOf="@id/edtConfirmPassword" />
 
-    <!-- Dòng chữ Đăng ký -->
     <LinearLayout
-        android:id="@+id/llSignUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal"
+    android:id="@+id/llLogIn"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="20dp"
+    android:orientation="horizontal"
         android:translationX="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnLogin">
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/btnSignUp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -222,7 +229,7 @@
             android:id="@+id/tvSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sign up"
+            android:text="Log in"
             android:textColor="#B71C1C"
             android:textSize="14sp"
             android:textStyle="bold" />
