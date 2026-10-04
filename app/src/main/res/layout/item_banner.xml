@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_banner_gradient"
+    android:padding="18dp">
+
+    <!-- Badge "HOT PHIM THÁNG" -->
+    <TextView
+        android:id="@+id/tv_badge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_badge_hot"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="HOT PHIM THÁNG"
+        android:textColor="#000000"
+        android:textSize="10sp"
+        android:textStyle="bold" />
+
+    <!-- Tên phim -->
+    <TextView
+        android:id="@+id/tv_banner_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="LẬT MẶT 7: ONE WISH"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- Mô tả ngắn -->
+    <TextView
+        android:id="@+id/tv_banner_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Khởi chiếu toàn quốc tại CQS Cinema"
+        android:textColor="#F0E0E0"
+        android:textSize="13sp" />
+
+    <!-- Nút Chi tiết phim (nền trắng, chữ đỏ gạch chân) -->
+    <TextView
+        android:id="@+id/btn_banner_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_button_white"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Chi tiết phim"
+        android:textColor="@color/color_primary"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

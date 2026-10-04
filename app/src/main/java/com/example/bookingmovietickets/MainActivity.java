@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -62,6 +63,16 @@ public class MainActivity extends AppCompatActivity {
             tvForgotPassword.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
+            });
+        }
+
+        // Ánh xạ nút Đăng nhập — THAY "btnLogin" bằng đúng id bạn tìm thấy trong activity_main.xml
+        View btnLogin = findViewById(R.id.btnLogin);
+        if (btnLogin != null) {
+            btnLogin.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(intent);
+                finish(); // để bấm Back không quay lại màn đăng nhập
             });
         }
     }

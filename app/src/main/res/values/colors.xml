@@ -5,4 +5,31 @@
     <color name="lightblue">#BAE1D2</color>
     <color name="drakblue">#667B73</color>
     <color name="combined_blue">#90AEA2</color>
+    <!-- Màu chính của app (đỏ CQS Cinema) -->
+    <color name="color_primary">#B71C1C</color>
+    <color name="banner_red_light">#B71C1C</color>
+    <color name="banner_red_dark">#6E0A0A</color>
+
+    <!-- Màu vàng cho badge "HOT PHIM THÁNG" và sao đánh giá -->
+    <color name="color_accent_yellow">#FFD600</color>
+
+    <!-- Badge độ tuổi phim -->
+    <color name="color_age_c16">#D32F2F</color>
+    <color name="color_age_p">#43A047</color>
+
+    <!-- Chữ phụ màu xám -->
+    <color name="color_text_gray">#757575</color>
+
+    <!-- Nền poster placeholder (chưa có ảnh thật) -->
+    <color name="color_poster_placeholder">#212121</color>
+
+    <!-- Nền badge điểm đánh giá (đen mờ) -->
+    <color name="color_rating_bg">#CC000000</color>
+
+    <!-- Nền tab chưa chọn -->
+    <color name="color_tab_inactive_bg">#EEEEEE</color>
+    <color name="color_tab_inactive_text">#424242</color>
+
+    <!-- Dot indicator banner -->
+    <color name="color_dot_inactive">#BDBDBD</color>
 </resources>
