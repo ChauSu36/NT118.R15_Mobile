@@ -53,5 +53,16 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             });
         }
+
+        // Ánh xạ chữ Forgot Password
+        TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
+
+        // Sự kiện bấm vào chữ Forgot Password -> Chuyển sang trang Reset
+        if (tvForgotPassword != null) {
+            tvForgotPassword.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
+                startActivity(intent);
+            });
+        }
     }
 }

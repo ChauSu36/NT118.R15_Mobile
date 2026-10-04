@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="51dp"
+    android:viewportWidth="744"
+    android:viewportHeight="594">
+
+    <group
+        android:translateX="-153"
+        android:translateY="-153">
+
+        <!-- Mũi tên cong -->
+        <path
+            android:pathData="M380,297 L380,168 L168,370 L380,595 L380,435 C560,435 690,500 735,650 C735,450 640,297 380,297 Z"
+            android:strokeColor="#B71C1C"
+            android:strokeWidth="30"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+
+        <!-- Khung bo góc -->
+        <path
+            android:pathData="M625,297 L820,297 Q882,297 882,360 L882,670 Q882,732 820,732 L365,732 Q300,732 300,670 L300,585"
+            android:strokeColor="#707070"
+            android:strokeWidth="30"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>
