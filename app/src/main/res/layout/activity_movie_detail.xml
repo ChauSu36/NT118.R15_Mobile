@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F7">
+
+    <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@id/layout_bottom_bar">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <!-- 1. KHU VỰC BANNER TRAILER (NỀN ĐEN) -->
+    <FrameLayout
+    android:id="@+id/layout_trailer_container"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:background="#121212">
+
+    <VideoView
+    android:id="@+id/video_view_trailer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:visibility="gone" />
+
+    <ImageView
+    android:id="@+id/img_trailer_thumbnail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scaleType="centerCrop"
+    android:src="@android:color/black" />
+
+    <LinearLayout
+    android:id="@+id/btn_play_trailer"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+
+    <ImageView
+    android:layout_width="56dp"
+    android:layout_height="56dp"
+    android:src="@android:drawable/ic_media_play"
+    app:tint="#D32F2F" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:text="XEM TRAILER"
+    android:textColor="#FFFFFF"
+    android:textSize="12sp"
+    android:textStyle="bold" />
+    </LinearLayout>
+
+    <ImageView
+    android:id="@+id/btn_back"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/bg_circle_button"
+    android:padding="8dp"
+    android:src="@android:drawable/ic_menu_revert"
+    app:tint="#FFFFFF" />
+
+    <ImageView
+    android:id="@+id/btn_favorite"
+    android:layout_width="36dp"
+    android:layout_height="36dp"
+    android:layout_gravity="end"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="16dp"
+    android:background="@drawable/bg_circle_button"
+    android:padding="8dp"
+    android:src="@android:drawable/btn_star_big_off"
+    app:tint="#FFFFFF" />
+
+    </FrameLayout>
+
+    <!-- 2. THẺ THÔNG TIN PHIM DECOR ĐÈ LÊN BANNER -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-40dp"
+    android:paddingHorizontal="16dp">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_rounded"
+    android:elevation="4dp"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+    android:id="@+id/img_movie_poster"
+    android:layout_width="100dp"
+    android:layout_height="140dp"
+    android:background="#333333"
+    android:scaleType="centerCrop" />
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:orientation="vertical">
+
+    <TextView
+    android:id="@+id/tv_detail_title"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="LẬT MẶT 7: ONE WISH"
+    android:textColor="#000000"
+    android:textSize="16sp"
+    android:textStyle="bold" />
+
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+    android:id="@+id/tv_detail_age"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_tag_age"
+    android:paddingHorizontal="6dp"
+    android:paddingVertical="2dp"
+    android:text="K16"
+    android:textColor="#D32F2F"
+    android:textSize="10sp"
+    android:textStyle="bold" />
+
+    <TextView
+    android:id="@+id/tv_detail_duration"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:text="138 phút"
+    android:textColor="#666666"
+    android:textSize="11sp" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:background="@drawable/bg_tag_black"
+    android:paddingHorizontal="6dp"
+    android:paddingVertical="2dp"
+    android:text="2D/IMAX"
+    android:textColor="#FFFFFF"
+    android:textSize="10sp"
+    android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:text="Khởi chiếu: 26/04/2026"
+    android:textColor="#333333"
+    android:textSize="12sp" />
+
+    <TextView
+    android:id="@+id/tv_detail_genre"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:text="Thể loại: Gia đình, Tâm lý, Hài"
+    android:textColor="#666666"
+    android:textSize="12sp" />
+
+    <TextView
+    android:id="@+id/tv_detail_rating"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:text="Đánh giá: ★ 4.9/5 (2.4k lượt xem)"
+    android:textColor="#666666"
+    android:textSize="12sp" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:text="Đạo diễn: Lý Hải"
+    android:textColor="#333333"
+    android:textSize="12sp" />
+    </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+    <!-- 3. NỘI DUNG PHIM -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:paddingHorizontal="16dp">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_rounded"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="NỘI DUNG PHIM"
+    android:textColor="#000000"
+    android:textSize="13sp"
+    android:textStyle="bold" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
+    android:lineSpacingExtra="3dp"
+    android:text="Chuyện phim xoay quanh gia đình bà Hai 73 tuổi và 5 người con trưởng thành. Khi biến cố xảy ra, trách nhiệm phụng dưỡng mẹ già bộc lộ những góc khuất tinh thần..."
+    android:textColor="#555555"
+    android:textSize="12sp" />
+    </LinearLayout>
+    </LinearLayout>
+
+    <!-- 4. DIỄN VIÊN CHÍNH -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:paddingHorizontal="16dp">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_rounded"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="DIỄN VIÊN CHÍNH"
+    android:textColor="#000000"
+    android:textSize="13sp"
+    android:textStyle="bold" />
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_circle_button" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="Thanh Hiền"
+    android:textColor="#333333"
+    android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_circle_button" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="T.M. Cường"
+    android:textColor="#333333"
+    android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_circle_button" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="Đinh Y Nhung"
+    android:textColor="#333333"
+    android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_circle_button" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:text="Q.N. Tuyền"
+    android:textColor="#333333"
+    android:textSize="11sp" />
+    </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+
+    <!-- 5. ĐÁNH GIÁ TỪ KHÁN GIẢ -->
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="12dp"
+    android:paddingHorizontal="16dp">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_rounded"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="ĐÁNH GIÁ TỪ KHÁN GIẢ"
+    android:textColor="#000000"
+    android:textSize="13sp"
+    android:textStyle="bold" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:text="Viết đánh giá ›"
+    android:textColor="#D32F2F"
+    android:textSize="12sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="#FFF5F5"
+    android:gravity="center_vertical"
+    android:padding="12dp">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="★ 4.9"
+    android:textColor="#FF9800"
+    android:textSize="20sp"
+    android:textStyle="bold" />
+
+    <LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:orientation="vertical">
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="96% khán giả đề xuất"
+    android:textColor="#000000"
+    android:textSize="12sp"
+    android:textStyle="bold" />
+
+    <TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Dựa trên 2.410 lượt xem tại CQS Cinema"
+    android:textColor="#777777"
+    android:textSize="10sp" />
+    </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+    android:id="@+id/layout_bottom_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="#FFFFFF"
+    android:elevation="8dp"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+    android:id="@+id/btn_book_ticket"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@drawable/bg_btn_book_ticket"
+    android:text="ĐẶT VÉ NGAY"
+    android:textColor="#FFFFFF"
+    android:textSize="15sp"
+    android:textStyle="bold" />
+    </LinearLayout>
+
+    </RelativeLayout>

@@ -1,5 +1,4 @@
 package com.example.bookingmovietickets;
-// LƯU Ý: đổi dòng package ở trên cho khớp với package thật trong project của bạn.
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
 
     /** Interface để HomeActivity biết khi nào người dùng bấm "Chi tiết phim". */
@@ -42,7 +42,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.tvRating.setText("★ " + movie.getRating());
         holder.tvAge.setText(movie.getAgeRating());
 
-        // Đổi màu badge độ tuổi theo giá trị: C16 -> đỏ, P -> xanh lá
         if ("C16".equals(movie.getAgeRating())) {
             holder.tvAge.setBackgroundResource(R.drawable.bg_badge_age_c16);
         } else {
@@ -50,6 +49,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
 
         holder.btnDetail.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onMovieClick(movie);
+            }
+        });
+
+        holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onMovieClick(movie);
             }

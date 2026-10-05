@@ -1,5 +1,4 @@
 package com.example.bookingmovietickets;
-// LƯU Ý: đổi dòng package ở trên cho khớp với package thật trong project của bạn.
 
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
 public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerViewHolder> {
 
     public interface OnBannerClickListener {
@@ -40,11 +40,16 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         holder.tvTitle.setText(banner.getTitle());
         holder.tvSubtitle.setText(banner.getSubtitle());
 
-        // Gạch chân chữ "Chi tiết phim" đúng như thiết kế
         holder.btnDetail.setPaintFlags(
                 holder.btnDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         holder.btnDetail.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onBannerClick(banner);
+            }
+        });
+
+        holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onBannerClick(banner);
             }

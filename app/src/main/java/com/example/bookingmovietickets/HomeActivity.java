@@ -1,22 +1,18 @@
 package com.example.bookingmovietickets;
-// LƯU Ý: đổi dòng package ở trên cho khớp với package thật trong project của bạn
-// (copy đúng dòng package từ MainActivity.java hiện tại của bạn).
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
@@ -33,7 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tabNowShowing, tabComingSoon;
     private RecyclerView rvMovies;
 
-    // ====== Dữ liệu (TĨNH — sau này thay bằng gọi API) ======
+    // ====== Dữ liệu ======
     private List<Banner> bannerList;
     private List<Movie> nowShowingList;
     private List<Movie> comingSoonList;
@@ -42,12 +38,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
-        // 2. Cấu hình tự động căn chỉnh lề theo thanh trạng thái & thanh điều hướng của hệ thống
+        // Cấu hình tự động căn chỉnh lề theo thanh trạng thái & thanh điều hướng của hệ thống
         View mainView = findViewById(R.id.main);
         if (mainView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
@@ -75,41 +70,28 @@ public class HomeActivity extends AppCompatActivity {
         rvMovies = findViewById(R.id.rv_movies);
     }
 
-    /**
-     * Dữ liệu tạm để dựng xong giao diện giống ảnh thiết kế.
-     * Khi nối API thật (GET /api/movies, server trả JSON),
-     * chỉ cần thay 3 hàm "new Movie(...)" này bằng kết quả
-     * MovieRepository trả về — không cần sửa layout hay Adapter.
-     */
     private void loadDummyData() {
         bannerList = new ArrayList<>();
         bannerList.add(new Banner("HOT PHIM THÁNG", "LẬT MẶT 7: ONE WISH",
-                "Khởi chiếu toàn quốc tại CQS Cinema"));
-        // 2 banner dưới là CHỖ TRỐNG để bạn thay nội dung thật sau này —
-        // hiện để tạm giống banner 1 cho đủ 3 dot như ảnh thiết kế.
+                "Gia đình, Tâm lý, Hài • 138p"));
         bannerList.add(new Banner("HOT PHIM THÁNG", "LẬT MẶT 7: ONE WISH",
-                "Khởi chiếu toàn quốc tại CQS Cinema"));
+                "Gia đình, Tâm lý, Hài • 138p"));
         bannerList.add(new Banner("HOT PHIM THÁNG", "LẬT MẶT 7: ONE WISH",
-                "Khởi chiếu toàn quốc tại CQS Cinema"));
+                "Gia đình, Tâm lý, Hài • 138p"));
 
         nowShowingList = new ArrayList<>();
         nowShowingList.add(new Movie("MAI (2024)", "Tình cảm • 131p", "C16", "4.8"));
         nowShowingList.add(new Movie("KUNG FU PANDA 4", "Hoạt hình • 94p", "P", "4.5"));
 
-        // Danh sách "Sắp chiếu" — tạm để trống, bạn thêm phim thật sau.
         comingSoonList = new ArrayList<>();
     }
 
     private void setupHeader() {
-        // Tên người dùng thật nên lấy từ SessionManager sau khi đăng nhập.
-        // Hiện để tạm đúng chữ trong ảnh thiết kế.
         tvUsername.setText("Nguyễn Văn A");
     }
 
     private void setupBanner() {
-        BannerAdapter bannerAdapter = new BannerAdapter(bannerList, banner ->
-                Toast.makeText(this, "Mở chi tiết: " + banner.getTitle(), Toast.LENGTH_SHORT).show()
-        );
+        BannerAdapter bannerAdapter = new BannerAdapter(bannerList, this::openMovieDetailFromBanner);
         vpBanner.setAdapter(bannerAdapter);
 
         setupDots(bannerList.size());
@@ -121,7 +103,16 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    /** Vẽ các dấu chấm tròn dưới banner (bắt chước dot indicator trong ảnh). */
+    private void openMovieDetailFromBanner(Banner banner) {
+        Intent intent = new Intent(HomeActivity.this, MovieDetailActivity.class);
+        intent.putExtra("EXTRA_MOVIE_TITLE", banner.getTitle());
+        intent.putExtra("EXTRA_MOVIE_GENRE", banner.getSubtitle());
+        intent.putExtra("EXTRA_MOVIE_RATING", "4.9");
+        intent.putExtra("EXTRA_MOVIE_AGE", "K16");
+        startActivity(intent);
+    }
+
+    /** Vẽ các dấu chấm tròn dưới banner. */
     private void setupDots(int count) {
         layoutDots.removeAllViews();
         int sizePx = dpToPx(8);
@@ -145,6 +136,17 @@ public class HomeActivity extends AppCompatActivity {
             ImageView dot = (ImageView) layoutDots.getChildAt(i);
             dot.setImageResource(i == selectedPosition ? R.drawable.dot_active : R.drawable.dot_inactive);
         }
+    }
+
+    private void openMovieDetail(Movie movie) {
+        Intent intent = new Intent(HomeActivity.this, MovieDetailActivity.class);
+
+        intent.putExtra("EXTRA_MOVIE_TITLE", movie.getTitle());
+        intent.putExtra("EXTRA_MOVIE_GENRE", movie.getGenreAndDuration());
+        intent.putExtra("EXTRA_MOVIE_RATING", movie.getRating());
+        intent.putExtra("EXTRA_MOVIE_AGE", movie.getAgeRating());
+
+        startActivity(intent);
     }
 
     private void setupTabs() {
@@ -175,28 +177,17 @@ public class HomeActivity extends AppCompatActivity {
         rvMovies.setAdapter(movieAdapter);
     }
 
-    private void openMovieDetail(Movie movie) {
-        // TODO: thay bằng Intent mở MovieDetailActivity, kèm putExtra("movie_id", ...)
-        Toast.makeText(this, "Mở chi tiết: " + movie.getTitle(), Toast.LENGTH_SHORT).show();
-    }
-
     private void setupBottomNav() {
         findViewById(R.id.nav_home).setOnClickListener(v ->
                 Toast.makeText(this, "Đang ở Trang chủ", Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.nav_cinema).setOnClickListener(v -> {
-            // TODO: mở màn hình Rạp chiếu
-            Toast.makeText(this, "Rạp chiếu (chưa làm)", Toast.LENGTH_SHORT).show();
-        });
+        findViewById(R.id.nav_cinema).setOnClickListener(v ->
+                Toast.makeText(this, "Rạp chiếu (chưa làm)", Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.nav_notification).setOnClickListener(v -> {
-            // TODO: mở màn hình Thông báo
-            Toast.makeText(this, "Thông báo (chưa làm)", Toast.LENGTH_SHORT).show();
-        });
+        findViewById(R.id.nav_notification).setOnClickListener(v ->
+                Toast.makeText(this, "Thông báo (chưa làm)", Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.nav_profile).setOnClickListener(v -> {
-            // TODO: mở màn hình Hồ sơ
-            Toast.makeText(this, "Hồ sơ (chưa làm)", Toast.LENGTH_SHORT).show();
-        });
+        findViewById(R.id.nav_profile).setOnClickListener(v ->
+                Toast.makeText(this, "Hồ sơ (chưa làm)", Toast.LENGTH_SHORT).show());
     }
 }
