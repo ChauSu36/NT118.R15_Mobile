@@ -84,6 +84,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void setupEvents() {
+        // Nút Quay lại (<) ở màn hình Chi tiết phim -> đóng màn hình và quay lại HomeActivity
         if (btnBack != null) {
             btnBack.setOnClickListener(v -> finish());
         }
@@ -97,10 +98,16 @@ public class MovieDetailActivity extends AppCompatActivity {
                     Toast.makeText(this, "Đã thêm vào danh sách yêu thích", Toast.LENGTH_SHORT).show());
         }
 
+        // Nút ĐẶT VÉ NGAY -> Mở SelectCinemaActivity
         View btnBook = findViewById(R.id.btn_book_ticket);
         if (btnBook != null) {
-            btnBook.setOnClickListener(v ->
-                    Toast.makeText(this, "Mở màn hình chọn ghế...", Toast.LENGTH_SHORT).show());
+            btnBook.setOnClickListener(v -> {
+                Intent intent = new Intent(MovieDetailActivity.this, SelectCinemaActivity.class);
+                if (tvMovieTitle != null) {
+                    intent.putExtra("EXTRA_MOVIE_TITLE", tvMovieTitle.getText().toString());
+                }
+                startActivity(intent);
+            });
         }
     }
 
