@@ -86,7 +86,6 @@ public class SelectSeatActivity extends AppCompatActivity {
         setupEvents();
         recalculateAndRefreshUI();
     }
-
     private void bindViews() {
         btnBack = findViewById(R.id.btn_back);
         layoutVoucherBar = findViewById(R.id.layout_voucher_bar);
@@ -213,7 +212,7 @@ public class SelectSeatActivity extends AppCompatActivity {
             layoutVoucherBar.setOnClickListener(v -> showVoucherDialog());
         }
 
-        // 4. Nút Đặt Vé Ngay
+        // 4. Nút Đặt Vé Ngay -> Chuyển sang màn hình PaymentActivity
         if (btnBookNow != null) {
             btnBookNow.setOnClickListener(v -> {
                 if (selectedSeats.isEmpty()) {
@@ -229,7 +228,13 @@ public class SelectSeatActivity extends AppCompatActivity {
                 int finalTotal = ticketTotal + comboTotal - discountTotal;
                 if (finalTotal < 0) finalTotal = 0;
 
-                Toast.makeText(this, "Đặt vé thành công ghế [" + seatsText + "]. Tổng: " + formatter.format(finalTotal) + " đ", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(SelectSeatActivity.this, PaymentActivity.class);
+                if (tvMovieTitle != null) {
+                    intent.putExtra("EXTRA_MOVIE_TITLE", tvMovieTitle.getText().toString());
+                }
+                intent.putExtra("EXTRA_SEATS", seatsText);
+                intent.putExtra("EXTRA_TOTAL_PRICE", finalTotal);
+                startActivity(intent);
             });
         }
     }
