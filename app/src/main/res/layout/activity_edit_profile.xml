@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F5F5F5">
+
+    <!-- ===== HEADER ===== -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_marginBottom="-10dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_circle_button"
+            android:padding="6dp"
+            android:src="@drawable/ic_chevron_left"
+            app:tint="#1A1A1A" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_marginBottom="-10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Chỉnh Sửa Thông Tin"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- ===== AVATAR ===== -->
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="24dp">
+
+                <TextView
+                    android:id="@+id/tv_avatar_placeholder"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:background="@drawable/bg_avatar_circle"
+                    android:gravity="center"
+                    android:text="U"
+                    android:textColor="#FFFFFF"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/iv_avatar_preview"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:background="@drawable/bg_avatar_circle"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <FrameLayout
+                    android:id="@+id/btn_change_avatar"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom|end"
+                    android:background="@drawable/bg_icon_circle_pink">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_camera" />
+                </FrameLayout>
+            </FrameLayout>
+
+            <!-- ===== HỌ VÀ TÊN ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Họ và tên"
+                android:textColor="@color/color_text_gray"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_edit_text_field"
+                android:padding="14dp"
+                android:text="Nguyễn Văn A"
+                android:textSize="14sp"
+                android:inputType="textPersonName"
+                android:singleLine="true" />
+
+            <!-- ===== SỐ ĐIỆN THOẠI ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Số điện thoại"
+                android:textColor="@color/color_text_gray"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/et_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_edit_text_field"
+                android:padding="14dp"
+                android:text="0901234567"
+                android:textSize="14sp"
+                android:inputType="phone"
+                android:singleLine="true" />
+
+            <!-- ===== GIỚI TÍNH ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Giới tính"
+                android:textColor="@color/color_text_gray"
+                android:textSize="13sp" />
+
+            <RadioGroup
+                android:id="@+id/rg_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_male"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/color_primary"
+                    android:checked="true"
+                    android:text="Nam"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_female"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/color_primary"
+                    android:text="Nữ"
+                    android:textSize="14sp" />
+
+                <RadioButton
+                    android:id="@+id/rb_other"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:buttonTint="@color/color_primary"
+                    android:text="Khác"
+                    android:textSize="14sp" />
+            </RadioGroup>
+
+            <!-- ===== NGÀY SINH ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Ngày sinh"
+                android:textColor="@color/color_text_gray"
+                android:textSize="13sp" />
+
+            <EditText
+                android:id="@+id/et_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/bg_edit_text_field"
+                android:padding="14dp"
+                android:focusable="false"
+                android:clickable="true"
+                android:hint="Chọn ngày sinh"
+                android:textSize="14sp" />
+
+            <!-- ===== NÚT LƯU ===== -->
+            <TextView
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/bg_button_primary"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="LƯU THAY ĐỔI"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

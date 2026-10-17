@@ -32,9 +32,9 @@
                 <!-- Avatar chữ U -->
                 <TextView
                     android:id="@+id/tv_avatar"
-                    android:layout_width="33dp"
-                    android:layout_height="33dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="0dp"
                     android:background="@drawable/bg_avatar_circle"
                     android:gravity="center"
                     android:text="U"
@@ -61,7 +61,7 @@
                     <TextView
                         android:id="@+id/tv_username"
                         android:layout_width="wrap_content"
-                        android:layout_height="16dp"
+                        android:layout_height="22dp"
                         android:text="Nguyễn Văn A"
                         android:textColor="#000000"
                         android:textSize="15sp"
