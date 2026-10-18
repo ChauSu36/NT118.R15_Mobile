@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Theme cho cả hộp thoại DatePickerDialog: đổi màu nút "Xác nhận"/"Hủy"
+         sang đỏ CQS Cinema, và gắn style spinner (cuộn) cho DatePicker bên trong -->
+    <style name="SpinnerDatePickerDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">#B71C1C</item>
+        <item name="android:datePickerStyle">@style/SpinnerDatePickerStyle</item>
+    </style>
+
+    <!-- Ép DatePicker hiển thị kiểu cuộn 3 cột ngày/tháng/năm thay vì lịch dạng lưới -->
+    <style name="SpinnerDatePickerStyle" parent="android:Widget.Material.Light.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:calendarViewShown">false</item>
+    </style>
+
+</resources>

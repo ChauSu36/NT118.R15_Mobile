@@ -115,6 +115,24 @@
                         android:text="SĐT: 090 123 4567"
                         android:textColor="@color/color_text_gray"
                         android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Giới tính: Nam"
+                        android:textColor="@color/color_text_gray"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/tv_dob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Ngày sinh: 01/01/2000"
+                        android:textColor="@color/color_text_gray"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
                 <FrameLayout

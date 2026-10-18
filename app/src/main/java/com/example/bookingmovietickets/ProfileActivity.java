@@ -17,7 +17,7 @@ public class ProfileActivity extends AppCompatActivity {
     // nhập từ server). Để tạm true để khớp đúng ảnh thiết kế (tài khoản ADMIN).
     private boolean isAdmin = true;
 
-    private TextView tvRoleBadge;
+    private TextView tvRoleBadge, tvGender, tvDob;
     private View layoutAdminSection, labelAdmin;
 
     @Override
@@ -37,6 +37,8 @@ public class ProfileActivity extends AppCompatActivity {
         tvRoleBadge = findViewById(R.id.tv_role_badge);
         layoutAdminSection = findViewById(R.id.layout_admin_section);
         labelAdmin = findViewById(R.id.label_admin);
+        tvGender = findViewById(R.id.tv_gender);
+        tvDob = findViewById(R.id.tv_dob);
     }
 
     /**

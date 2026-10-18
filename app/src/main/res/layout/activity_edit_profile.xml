@@ -155,28 +155,31 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:buttonTint="@color/color_primary"
                     android:checked="true"
                     android:text="Nam"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:buttonTint="@color/radio_button_tint"
+                    app:buttonTint="@color/radio_button_tint"/>
 
                 <RadioButton
                     android:id="@+id/rb_female"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:buttonTint="@color/color_primary"
                     android:text="Nữ"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:buttonTint="@color/radio_button_tint"
+                    app:buttonTint="@color/radio_button_tint"/>
 
                 <RadioButton
                     android:id="@+id/rb_other"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:buttonTint="@color/color_primary"
                     android:text="Khác"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:buttonTint="@color/radio_button_tint"
+                    app:buttonTint="@color/radio_button_tint"/>
             </RadioGroup>
 
             <!-- ===== NGÀY SINH ===== -->
