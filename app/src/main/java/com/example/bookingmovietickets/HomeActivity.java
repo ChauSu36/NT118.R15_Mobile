@@ -181,16 +181,19 @@ public class HomeActivity extends AppCompatActivity {
         findViewById(R.id.nav_home).setOnClickListener(v ->
                 Toast.makeText(this, "Đang ở Trang chủ", Toast.LENGTH_SHORT).show());
 
-        findViewById(R.id.nav_cinema).setOnClickListener(v ->
-                Toast.makeText(this, "Rạp chiếu (chưa làm)", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.nav_cinema).setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, SelectCinemaActivity.class);
+            startActivity(intent);
+        });
 
-        findViewById(R.id.nav_notification).setOnClickListener(v ->
-                Toast.makeText(this, "Thông báo (chưa làm)", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.nav_notification).setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
 
         findViewById(R.id.nav_profile).setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
-            // KHÔNG dùng finish() — để nút "Trang chủ" bên Profile quay lại đúng Home
         });
     }
 }

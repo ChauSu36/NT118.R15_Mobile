@@ -132,16 +132,16 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupBottomNav() {
-        // Đang ở tab Hồ sơ nên chỉ cần đóng màn này để quay lại đúng HomeActivity
-        // (vì HomeActivity mở ProfileActivity bằng startActivity, không finish()).
         findViewById(R.id.nav_home).setOnClickListener(v -> finish());
 
-        findViewById(R.id.nav_cinema).setOnClickListener(v ->
-                Toast.makeText(this, "Rạp chiếu (chưa làm)", Toast.LENGTH_SHORT).show());
+        findViewById(R.id.nav_cinema).setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, SelectCinemaActivity.class);
+            startActivity(intent);
+        });
 
-        findViewById(R.id.nav_notification).setOnClickListener(v ->
-                Toast.makeText(this, "Thông báo (chưa làm)", Toast.LENGTH_SHORT).show());
-
-        // nav_profile không cần gắn gì — đang đứng sẵn ở đây rồi.
+        findViewById(R.id.nav_notification).setOnClickListener(v -> {
+            Intent intent = new Intent(ProfileActivity.this, NotificationActivity.class);
+            startActivity(intent);
+        });
     }
 }
