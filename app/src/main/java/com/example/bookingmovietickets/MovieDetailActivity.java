@@ -86,7 +86,10 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void setupEvents() {
         // Nút Quay lại (<) ở màn hình Chi tiết phim -> đóng màn hình và quay lại HomeActivity
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
+            btnBack.setOnClickListener(v -> {
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
         }
 
         if (btnPlayTrailer != null) {
@@ -107,6 +110,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                     intent.putExtra("EXTRA_MOVIE_TITLE", tvMovieTitle.getText().toString());
                 }
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
     }

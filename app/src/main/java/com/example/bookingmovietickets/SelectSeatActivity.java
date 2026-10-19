@@ -199,7 +199,10 @@ public class SelectSeatActivity extends AppCompatActivity {
     private void setupEvents() {
         // 1. Nút quay lại (<): Đóng màn hình SelectSeatActivity để quay lại SelectCinemaActivity
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
+            btnBack.setOnClickListener(v -> {
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
         }
 
         // 2. Bấm chọn Combo Bắp Nước
@@ -235,6 +238,7 @@ public class SelectSeatActivity extends AppCompatActivity {
                 intent.putExtra("EXTRA_SEATS", seatsText);
                 intent.putExtra("EXTRA_TOTAL_PRICE", finalTotal);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
     }

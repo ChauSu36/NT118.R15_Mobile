@@ -2,9 +2,14 @@ package com.example.bookingmovietickets;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,7 +25,17 @@ public class NotificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_notification);
+
+        View mainView = findViewById(R.id.main);
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         rvNotifications = findViewById(R.id.rvNotifications);
         if (rvNotifications != null) {
@@ -73,13 +88,15 @@ public class NotificationActivity extends AppCompatActivity {
 
     private void setupBottomNav() {
         if (findViewById(R.id.nav_home) != null) {
-            findViewById(R.id.nav_home).setOnClickListener(v -> finish());
+            findViewById(R.id.nav_home).setOnClickListener(v -> openHome());
         }
 
         if (findViewById(R.id.nav_cinema) != null) {
             findViewById(R.id.nav_cinema).setOnClickListener(v -> {
-                Intent intent = new Intent(this, SelectCinemaActivity.class);
+                Intent intent = new Intent(this, CinemaActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
 
@@ -92,7 +109,17 @@ public class NotificationActivity extends AppCompatActivity {
             findViewById(R.id.nav_profile).setOnClickListener(v -> {
                 Intent intent = new Intent(this, ProfileActivity.class);
                 startActivity(intent);
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
+    }
+
+    private void openHome() {
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 }

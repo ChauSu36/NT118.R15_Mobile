@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
             llSignUp.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, SignUpActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
 
@@ -63,16 +64,18 @@ public class MainActivity extends AppCompatActivity {
             tvForgotPassword.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
 
-        // Ánh xạ nút Đăng nhập — THAY "btnLogin" bằng đúng id bạn tìm thấy trong activity_main.xml
+        // Ánh xạ nút Đăng nhập
         View btnLogin = findViewById(R.id.btnLogin);
         if (btnLogin != null) {
             btnLogin.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                 startActivity(intent);
-                finish(); // để bấm Back không quay lại màn đăng nhập
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
     }

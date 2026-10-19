@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
 
     <!-- ===== HEADER ===== -->
     <TextView
@@ -461,7 +463,7 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ===== THANH ĐIỀU HƯỚNG DƯỚI ===== -->
+    <!-- ===== THANH ĐIỀU HƯỚNG DƯỚI (MÀU TRẮNG TINH #FFFFFF, ĐỒNG BỘ 100%) ===== -->
     <LinearLayout
         android:id="@+id/bottom_nav"
         android:layout_width="match_parent"

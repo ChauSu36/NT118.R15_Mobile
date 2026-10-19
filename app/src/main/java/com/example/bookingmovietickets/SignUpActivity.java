@@ -86,7 +86,10 @@ public class SignUpActivity extends AppCompatActivity {
 
         // 5. Xử lý khi nhấn chữ "Log in" để quay lại màn hình Đăng nhập
         if (llLogIn != null) {
-            llLogIn.setOnClickListener(v -> finish());
+            llLogIn.setOnClickListener(v -> {
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
         }
     }
 
@@ -169,6 +172,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         Toast.makeText(SignUpActivity.this, "Đăng ký tài khoản thành công!", Toast.LENGTH_SHORT).show();
         finish();
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
     }
 
     private String getSelectedGender() {

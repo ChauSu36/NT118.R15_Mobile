@@ -50,8 +50,14 @@ public class SelectCinemaActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if (intent != null) {
             movieTitle = intent.getStringExtra("EXTRA_MOVIE_TITLE");
-            if (tvMovieTitleHeader != null && movieTitle != null && !movieTitle.isEmpty()) {
-                tvMovieTitleHeader.setText(movieTitle);
+            String cinemaName = intent.getStringExtra("EXTRA_CINEMA_NAME");
+
+            if (tvMovieTitleHeader != null) {
+                if (cinemaName != null && !cinemaName.isEmpty()) {
+                    tvMovieTitleHeader.setText(cinemaName);
+                } else if (movieTitle != null && !movieTitle.isEmpty()) {
+                    tvMovieTitleHeader.setText(movieTitle);
+                }
             }
         }
     }
@@ -59,7 +65,10 @@ public class SelectCinemaActivity extends AppCompatActivity {
     private void setupEvents() {
         // 1. Nút Quay lại (<): Trở về màn hình MovieDetailActivity
         if (btnBack != null) {
-            btnBack.setOnClickListener(v -> finish());
+            btnBack.setOnClickListener(v -> {
+                finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            });
         }
 
         // 2. Nút Tiếp tục chọn ghế: Mở SelectSeatActivity
@@ -70,6 +79,7 @@ public class SelectCinemaActivity extends AppCompatActivity {
                     intent.putExtra("EXTRA_MOVIE_TITLE", movieTitle);
                 }
                 startActivity(intent);
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
     }

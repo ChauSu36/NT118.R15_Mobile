@@ -69,6 +69,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(ResetPasswordActivity.this, "Cập nhật mật khẩu thành công!", Toast.LENGTH_SHORT).show();
                 finish(); // Tự động đóng màn hình này để quay lại Login
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         });
 
@@ -79,6 +80,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 finish();
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
     }

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/bg_card_rounded"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- BADGE GẦN BẠN -->
+    <TextView
+        android:id="@+id/tvBadgeNear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/bg_badge_near"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="GẦN BẠN"
+        android:textColor="#2E7D32"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <!-- TÊN RẠP VÀ KHOẢNG CÁCH -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvCinemaName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/layoutDistance"
+            android:layout_alignParentStart="true"
+            android:text="CQS Cinema Nguyễn Trãi"
+            android:textColor="#1A1A1A"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/layoutDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_location"
+                app:tint="#D32F2F" />
+
+            <TextView
+                android:id="@+id/tvDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="1.2 km"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- ĐỊA CHỈ -->
+    <TextView
+        android:id="@+id/tvCinemaAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="235 Nguyễn Trãi, P. Nguyễn Cư Trinh, Q.1"
+        android:textColor="#666666"
+        android:textSize="12sp" />
+
+    <!-- DANH SÁCH GIỜ CHIẾU (CONTAINER) -->
+    <LinearLayout
+        android:id="@+id/layoutShowtimes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="12dp"
+        android:background="#F0F0F0" />
+
+    <!-- NÚT XEM TẤT CẢ LỊCH CHIẾU -->
+    <Button
+        android:id="@+id/btnViewSchedule"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:background="@drawable/bg_button_primary"
+        android:text="XEM TẤT CẢ LỊCH CHIẾU RẠP NÀY"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:backgroundTint="@null" />
+
+</LinearLayout>

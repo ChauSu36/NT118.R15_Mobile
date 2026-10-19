@@ -38,11 +38,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_home);
 
-        // Cấu hình tự động căn chỉnh lề theo thanh trạng thái & thanh điều hướng của hệ thống
         View mainView = findViewById(R.id.main);
         if (mainView != null) {
             ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
@@ -182,18 +180,21 @@ public class HomeActivity extends AppCompatActivity {
                 Toast.makeText(this, "Đang ở Trang chủ", Toast.LENGTH_SHORT).show());
 
         findViewById(R.id.nav_cinema).setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, SelectCinemaActivity.class);
+            Intent intent = new Intent(HomeActivity.this, CinemaActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         findViewById(R.id.nav_notification).setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, NotificationActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         findViewById(R.id.nav_profile).setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
     }
 }
