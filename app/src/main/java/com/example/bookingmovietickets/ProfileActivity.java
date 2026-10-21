@@ -84,7 +84,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void setupSettingsRows() {
         findViewById(R.id.row_ticket_history).setOnClickListener(v -> {
-            Toast.makeText(this, "Lịch sử đặt vé (chưa làm)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, TicketHistoryActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         findViewById(R.id.row_change_password).setOnClickListener(v -> {
