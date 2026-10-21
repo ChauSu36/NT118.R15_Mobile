@@ -1,6 +1,7 @@
 package com.example.bookingmovietickets;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -90,12 +92,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             holder.tvActionLink.setText(item.getActionText());
         }
 
-        // Sự kiện click
-        holder.btnQr.setOnClickListener(v ->
-                Toast.makeText(context, "Hiển thị mã QR cho: " + item.getSubtitle(), Toast.LENGTH_SHORT).show());
+        // Sự kiện click nút QR -> Mở TicketDetailActivity
+        holder.btnQr.setOnClickListener(v -> {
+            Intent intent = new Intent(context, TicketDetailActivity.class);
+            context.startActivity(intent);
+            if (context instanceof AppCompatActivity) {
+                ((AppCompatActivity) context).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
 
-        holder.tvActionLink.setOnClickListener(v ->
-                Toast.makeText(context, "Thực hiện: " + item.getActionText(), Toast.LENGTH_SHORT).show());
+        // Sự kiện click "Áp dụng ngay" ở thông báo Voucher -> Mở CinemaActivity (Hệ thống rạp CQS) kèm mã giảm giá
+        holder.tvActionLink.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CinemaActivity.class);
+            intent.putExtra("EXTRA_VOUCHER_CODE", "CQS30K");
+            intent.putExtra("EXTRA_DISCOUNT_AMOUNT", 30000);
+            context.startActivity(intent);
+            if (context instanceof AppCompatActivity) {
+                ((AppCompatActivity) context).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
 
         holder.itemView.setOnClickListener(v ->
                 Toast.makeText(context, "Thông báo: " + item.getTitle(), Toast.LENGTH_SHORT).show());

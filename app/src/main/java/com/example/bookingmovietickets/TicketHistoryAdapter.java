@@ -2,6 +2,7 @@ package com.example.bookingmovietickets;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -61,18 +63,22 @@ public class TicketHistoryAdapter extends RecyclerView.Adapter<TicketHistoryAdap
             holder.btnCancelTicket.setVisibility(View.GONE);
         }
 
-        // Bấm Chi tiết vé & mã QR
-        holder.btnDetailQr.setOnClickListener(v ->
-                Toast.makeText(context, "Chi tiết vé " + item.getOrderCode() + " & Mã QR", Toast.LENGTH_SHORT).show());
+        // Bấm Chi tiết vé & mã QR -> Mở TicketDetailActivity
+        holder.btnDetailQr.setOnClickListener(v -> {
+            Intent intent = new Intent(context, TicketDetailActivity.class);
+            context.startActivity(intent);
+            if (context instanceof AppCompatActivity) {
+                ((AppCompatActivity) context).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+            }
+        });
 
         // Bấm Hủy vé
         holder.btnCancelTicket.setOnClickListener(v -> new AlertDialog.Builder(context)
                 .setTitle("Hủy vé xem phim")
                 .setMessage("Bạn có chắc muốn hủy vé đơn " + item.getOrderCode() + " không?")
                 .setNegativeButton("Không", null)
-                .setPositiveButton("Hủy vé", (dialog, which) -> {
-                    Toast.makeText(context, "Đã gửi yêu cầu hủy vé " + item.getOrderCode(), Toast.LENGTH_SHORT).show();
-                })
+                .setPositiveButton("Hủy vé", (dialog, which) ->
+                        Toast.makeText(context, "Đã gửi yêu cầu hủy vé " + item.getOrderCode(), Toast.LENGTH_SHORT).show())
                 .show());
     }
 
