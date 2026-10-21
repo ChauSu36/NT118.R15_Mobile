@@ -101,11 +101,16 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             }
         });
 
-        // Sự kiện click "Áp dụng ngay" ở thông báo Voucher -> Mở CinemaActivity (Hệ thống rạp CQS) kèm mã giảm giá
+        // Sự kiện click "Xem chi tiết hóa đơn" hoặc "Áp dụng ngay"
         holder.tvActionLink.setOnClickListener(v -> {
-            Intent intent = new Intent(context, CinemaActivity.class);
-            intent.putExtra("EXTRA_VOUCHER_CODE", "CQS30K");
-            intent.putExtra("EXTRA_DISCOUNT_AMOUNT", 30000);
+            Intent intent;
+            if (item.getType() == Notification.TYPE_SUCCESS) {
+                intent = new Intent(context, BookingSuccessActivity.class);
+            } else {
+                intent = new Intent(context, CinemaActivity.class);
+                intent.putExtra("EXTRA_VOUCHER_CODE", "CQS30K");
+                intent.putExtra("EXTRA_DISCOUNT_AMOUNT", 30000);
+            }
             context.startActivity(intent);
             if (context instanceof AppCompatActivity) {
                 ((AppCompatActivity) context).overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
