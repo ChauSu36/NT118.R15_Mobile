@@ -90,7 +90,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.row_change_password).setOnClickListener(v -> {
-            Toast.makeText(this, "Đổi mật khẩu (chưa làm)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, ChangePasswordActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         findViewById(R.id.row_about).setOnClickListener(v -> {
