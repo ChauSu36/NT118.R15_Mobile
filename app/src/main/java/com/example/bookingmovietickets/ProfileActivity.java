@@ -94,7 +94,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.row_about).setOnClickListener(v -> {
-            Toast.makeText(this, "Về CQS Cinema (chưa làm)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, AboutTermsActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         SwitchCompat switchNotification = findViewById(R.id.switch_notification);

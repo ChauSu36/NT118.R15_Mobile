@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:fitsSystemWindows="true">
+
+    <!-- ===== 1. HEADER (RelativeLayout) ===== -->
+    <RelativeLayout
+        android:id="@+id/layout_header"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_circle_button"
+            android:padding="8dp"
+            android:src="@drawable/ic_chevron_left"
+            app:tint="#1A1A1A" />
+
+        <TextView
+            android:id="@+id/tv_header_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="CQS CINEMA &amp; ĐIỀU KHOẢN"
+            android:textColor="#1A1A1A"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <!-- ===== 2. NỘI DUNG CUỘN (NestedScrollView + LinearLayout) ===== -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- KHUNG 1: GIỚI THIỆU CQS CINEMA -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GIỚI THIỆU CQS CINEMA"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="CQS Cinema là ứng dụng đặt vé xem phim trực tuyến hiện đại, giúp người dùng dễ dàng tra cứu lịch chiếu, chọn rạp, chọn ghế ngồi và mua combo bắp nước nhanh chóng. Ứng dụng được thiết kế nhằm mang lại trải nghiệm điện ảnh mượt mà, tiện lợi và tối ưu nhất cho khán giả."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- KHUNG 2: 1. QUY ĐỊNH PHÂN LOẠI ĐỘ TUỔI -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1. QUY ĐỊNH PHÂN LOẠI ĐỘ TUỔI"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="Khán giả khi mua vé cần tuân thủ đúng quy định phân loại độ tuổi phim của Cục Điện ảnh:\n• P (General): Phim được phép phổ biến đến khán giả ở mọi lứa tuổi.\n• K: Phim được phổ biến đến khán giả dưới 13 tuổi với điều kiện xem cùng cha mẹ hoặc người giám hộ.\n• T13 (13+): Phim phổ biến đến khán giả từ đủ 13 tuổi trở lên.\n• T16 (16+): Phim phổ biến đến khán giả từ đủ 16 tuổi trở lên.\n• T18 (18+): Phim phổ biến đến khán giả từ đủ 18 tuổi trở lên.\n• Lưu ý: Khán giả cần mang theo CCCD/Giấy tờ tùy thân có ảnh để nhân viên kiểm tra tại rạp. CQS Cinema có quyền từ chối vào phòng chiếu và không hoàn tiền nếu khán giả không đáp ứng đúng độ tuổi quy định."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- KHUNG 3: 2. NỘI QUY RẠP CHIẾU PHIM -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2. NỘI QUY RẠP CHIẾU PHIM"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="Để đảm bảo trải nghiệm xem phim tốt nhất cho tất cả khán giả:\n• Không mang thức ăn, đồ uống mua bên ngoài vào rạp chiếu phim.\n• Mọi hành vi quay phim, chụp ảnh, ghi âm hoặc phát sóng trực tiếp (livestream) bên trong phòng chiếu đều bị nghiêm cấm.\n• Vui lòng chuyển điện thoại sang chế độ rung/im lặng và không gác chân lên hàng ghế phía trước.\n• Khán giả nên có mặt tại rạp trước giờ chiếu từ 10 - 15 phút để thực hiện quét mã QR soát vé."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- KHUNG 4: 3. ĐIỀU KHOẢN VÉ & BẢN QUYỀN -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_rounded"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3. ĐIỀU KHOẢN VÉ &amp; BẢN QUYỀN"
+                    android:textColor="#000000"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="• Quy định đổi/trả vé: Vé xem phim và combo bắp nước sau khi thanh toán thành công không áp dụng hủy, đổi lịch hoặc hoàn tiền dưới mọi hình thức.\n• Bảo mật Mã QR: Khách hàng có trách nhiệm tự bảo mật Mã QR soát vé. CQS Cinema không chịu trách nhiệm đối với các trường hợp mã vé bị rò rỉ dẫn đến việc người khác sử dụng trước.\n• Quyền sở hữu trí tuệ: Toàn bộ giao diện, hình ảnh, mã nguồn và nhận diện thương hiệu CQS Cinema thuộc bản quyền của nhóm phát triển dự án. Mọi hành vi sao chép không qua xin phép đều vi phạm bản quyền."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- KHUNG 5: THÔNG TIN XÁC NHẬN ĐỒ ÁN (GỌN GÀNG) -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/bg_info_box_border"
+                android:backgroundTint="#F5F5F7"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="THÔNG TIN XÁC NHẬN ĐỒ ÁN"
+                    android:textColor="#D32F2F"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="2dp"
+                    android:text="• Tên dự án: Ứng dụng Đặt vé Xem phim CQS Cinema\n• Đơn vị thực hiện: Nhóm 13 - Trường Đại học Công nghệ Thông tin (UIT)\n• Thành viên thực hiện:\n   1. Phạm Trần Chính\n   2. Nguyễn Đình Quốc\n   3. Châu Lê Quốc Sử\n• Mục đích: Sản phẩm đồ án môn học Phát triển Ứng dụng Di động."
+                    android:textColor="#424242"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="#E0E0E0" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="© 2026 CQS CINEMA - UIT PROJECT"
+                    android:textColor="#212121"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
