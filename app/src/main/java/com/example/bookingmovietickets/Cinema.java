@@ -8,6 +8,7 @@ public class Cinema {
     private String distance;
     private boolean isNear; // true nếu rạp gần người dùng (thêm viền đỏ + badge)
     private List<String> showtimes;
+    private String selectedShowtime = "";
 
     public Cinema(String name, String address, String distance, boolean isNear, List<String> showtimes) {
         this.name = name;
@@ -22,4 +23,7 @@ public class Cinema {
     public String getDistance() { return distance; }
     public boolean isNear() { return isNear; }
     public List<String> getShowtimes() { return showtimes; }
+
+    public String getSelectedShowtime() { return selectedShowtime; }
+    public void setSelectedShowtime(String selectedShowtime) { this.selectedShowtime = selectedShowtime; }
 }

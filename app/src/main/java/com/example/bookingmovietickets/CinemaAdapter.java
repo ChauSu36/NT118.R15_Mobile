@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +21,8 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.CinemaView
 
     private final Context context;
     private final List<Cinema> cinemaList;
+    private int selectedPosition = -1; // -1 nghĩa là chưa rạp nào được chọn
+    private String selectedShowtimeText = "";
 
     public CinemaAdapter(Context context, List<Cinema> cinemaList) {
         this.context = context;
@@ -43,36 +44,29 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.CinemaView
         holder.tvAddress.setText(item.getAddress());
         holder.tvDistance.setText(item.getDistance());
 
-        // Phân biệt Rạp Gần Bạn và Rạp thường
-        if (item.isNear()) {
-            holder.tvBadgeNear.setVisibility(View.VISIBLE);
+        // Hiển thị huy hiệu Gần bạn nếu có
+        holder.tvBadgeNear.setVisibility(item.isNear() ? View.VISIBLE : View.GONE);
 
-            GradientDrawable borderDrawable = new GradientDrawable();
-            borderDrawable.setColor(Color.WHITE);
-            borderDrawable.setCornerRadius(dpToPx(16));
+        // Nút xem tất cả lịch chiếu rạp này: Nền đỏ, chữ trắng
+        holder.btnViewSchedule.setBackgroundResource(R.drawable.bg_button_primary);
+        holder.btnViewSchedule.setTextColor(Color.WHITE);
+
+        // Viền khung rạp: Chỉ rạp nào đang được click (selectedPosition == position) mới có VIỀN ĐỎ, còn lại VIỀN XÁM
+        GradientDrawable borderDrawable = new GradientDrawable();
+        borderDrawable.setColor(Color.WHITE);
+        borderDrawable.setCornerRadius(dpToPx(16));
+        if (selectedPosition == position) {
             borderDrawable.setStroke(dpToPx(1.5f), Color.parseColor("#D32F2F"));
-            holder.cardContainer.setBackground(borderDrawable);
-
-            holder.btnViewSchedule.setBackgroundResource(R.drawable.bg_button_primary);
-            holder.btnViewSchedule.setTextColor(Color.WHITE);
         } else {
-            holder.tvBadgeNear.setVisibility(View.GONE);
-
-            GradientDrawable borderDrawable = new GradientDrawable();
-            borderDrawable.setColor(Color.WHITE);
-            borderDrawable.setCornerRadius(dpToPx(16));
             borderDrawable.setStroke(dpToPx(1), Color.parseColor("#E0E0E0"));
-            holder.cardContainer.setBackground(borderDrawable);
-
-            holder.btnViewSchedule.setBackgroundResource(R.drawable.bg_button_outline_red);
-            holder.btnViewSchedule.setTextColor(Color.parseColor("#D32F2F"));
         }
+        holder.cardContainer.setBackground(borderDrawable);
 
         // Tạo danh sách giờ chiếu động
         holder.layoutShowtimes.removeAllViews();
         List<String> showtimes = item.getShowtimes();
-        for (int i = 0; i < showtimes.size(); i++) {
-            final String timeText = showtimes.get(i);
+        for (int index = 0; index < showtimes.size(); index++) {
+            final String timeText = showtimes.get(index);
             TextView timeTv = new TextView(context);
             timeTv.setText(timeText);
             timeTv.setTextSize(12);
@@ -83,24 +77,34 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.CinemaView
             params.setMargins(0, 0, dpToPx(8), 0);
             timeTv.setLayoutParams(params);
 
-            if (item.isNear() && i == 0) {
+            boolean isSelectedPill = timeText.equals(item.getSelectedShowtime());
+
+            if (isSelectedPill) {
                 GradientDrawable activePill = new GradientDrawable();
                 activePill.setColor(Color.WHITE);
                 activePill.setCornerRadius(dpToPx(6));
-                activePill.setStroke(dpToPx(1), Color.parseColor("#D32F2F"));
+                activePill.setStroke(dpToPx(1.5f), Color.parseColor("#D32F2F"));
                 timeTv.setBackground(activePill);
                 timeTv.setTextColor(Color.parseColor("#D32F2F"));
                 timeTv.setTypeface(null, android.graphics.Typeface.BOLD);
             } else {
                 GradientDrawable inactivePill = new GradientDrawable();
-                inactivePill.setColor(Color.parseColor("#F5F5F5"));
+                inactivePill.setColor(Color.WHITE);
                 inactivePill.setCornerRadius(dpToPx(6));
+                inactivePill.setStroke(dpToPx(1), Color.parseColor("#E0E0E0"));
                 timeTv.setBackground(inactivePill);
                 timeTv.setTextColor(Color.parseColor("#333333"));
+                timeTv.setTypeface(null, android.graphics.Typeface.NORMAL);
             }
 
             timeTv.setOnClickListener(v -> {
-                Intent intent = new Intent(context, SelectSeatActivity.class);
+                selectedPosition = holder.getAdapterPosition();
+                item.setSelectedShowtime(timeText);
+                selectedShowtimeText = timeText;
+                notifyDataSetChanged();
+
+                Intent intent = new Intent(context, SelectCinemaActivity.class);
+                intent.putExtra("EXTRA_CINEMA_NAME", item.getName());
                 intent.putExtra("EXTRA_SHOWTIME", timeText);
                 context.startActivity(intent);
             });
@@ -108,18 +112,22 @@ public class CinemaAdapter extends RecyclerView.Adapter<CinemaAdapter.CinemaView
             holder.layoutShowtimes.addView(timeTv);
         }
 
-        // Bấm xem tất cả lịch chiếu rạp này -> Mở SelectCinemaActivity
-        holder.btnViewSchedule.setOnClickListener(v -> {
-            Intent intent = new Intent(context, SelectCinemaActivity.class);
-            intent.putExtra("EXTRA_CINEMA_NAME", item.getName());
-            context.startActivity(intent);
-        });
+        // Bấm vào card hoặc nút xem lịch chiếu -> Đổi khung rạp sang viền đỏ và mở SelectCinemaActivity
+        View.OnClickListener selectAndOpenAction = v -> {
+            selectedPosition = holder.getAdapterPosition();
+            notifyDataSetChanged();
 
-        holder.cardContainer.setOnClickListener(v -> {
             Intent intent = new Intent(context, SelectCinemaActivity.class);
             intent.putExtra("EXTRA_CINEMA_NAME", item.getName());
+            if (!selectedShowtimeText.isEmpty()) {
+                intent.putExtra("EXTRA_SHOWTIME", selectedShowtimeText);
+                selectedShowtimeText = ""; // reset sau khi truyền
+            }
             context.startActivity(intent);
-        });
+        };
+
+        holder.btnViewSchedule.setOnClickListener(selectAndOpenAction);
+        holder.cardContainer.setOnClickListener(selectAndOpenAction);
     }
 
     @Override
