@@ -115,7 +115,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="20dp"
-            android:text="Sign Up"
+            android:text="ĐĂNG KÍ"
             android:textColor="#707070"
             android:textSize="40sp"
             android:textStyle="bold"
@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Please create an account"
+            android:text="Vui lòng tạo tài khoản"
             android:textColor="#9E9E9E"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
@@ -142,7 +142,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Full Name"
+            android:hint="Tên đầy đủ"
             android:inputType="textPersonName"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -166,7 +166,7 @@
             android:drawableTint="#9E9E9E"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:hint="Date of Birth"
+            android:hint="Ngày sinh"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
-                android:text="Gender"
+                android:text="Giới tính"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -208,7 +208,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Male"
+                    android:text="Nam"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:buttonTint="@color/radio_button_tint"
@@ -219,7 +219,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Female"
+                    android:text="Nữ"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:buttonTint="@color/radio_button_tint"
@@ -230,7 +230,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Other"
+                    android:text="Khác"
                     android:textColor="#000000"
                     android:textSize="14sp"
                     android:buttonTint="@color/radio_button_tint"
@@ -246,7 +246,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Phone Number"
+            android:hint="Số điện thoại"
             android:inputType="phone"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -264,7 +264,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Email Address"
+            android:hint="Địa chỉ "
             android:inputType="textEmailAddress"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -282,7 +282,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Password"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -293,24 +293,27 @@
             app:layout_constraintTop_toBottomOf="@id/edtEmail" />
 
         <!-- 7. CONFIRM PASSWORD -->
+
+        <!-- NÚT SIGN UP -->
+
         <EditText
             android:id="@+id/edtConfirmPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Confirm Password"
+            android:hint="Xác nhận mật khẩu"
             android:inputType="textPassword"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtPassword" />
 
-        <!-- NÚT SIGN UP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             android:layout_width="0dp"
@@ -318,7 +321,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="#B71C1C"
             android:fontFamily="serif"
-            android:text="Sign Up"
+            android:text="Đăng Kí"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -343,7 +346,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Already have an account? "
+                android:text="Đã có tài khoản trước ? "
                 android:textColor="#333333"
                 android:textSize="14sp" />
 
@@ -351,7 +354,7 @@
                 android:id="@+id/tvSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log in"
+                android:text="Đăng Nhập"
                 android:textColor="#B71C1C"
                 android:textSize="14sp"
                 android:textStyle="bold" />
