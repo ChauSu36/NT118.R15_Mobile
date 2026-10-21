@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card_rounded"
+    android:orientation="vertical"
+    android:padding="14dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="4dp"
+    android:elevation="2dp">
+
+    <!-- ===== TOP ROW: Poster & Thông tin mô tả ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Poster Phim -->
+        <FrameLayout
+            android:layout_width="78dp"
+            android:layout_height="105dp"
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="#1A1A1A"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/tv_poster_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="LẬT MẶT 7\nONE WISH"
+                android:textColor="#FFFFFF"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_manage_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:background="@drawable/bg_button_light_red"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:text="ĐANG CHIẾU"
+                android:textColor="#D32F2F"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_manage_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lật Mặt 7: Một Điều Ước"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_manage_age_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Độ tuổi: C16 • Thời lượng: 138p"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_manage_genre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Thể loại: Gia đình, Tâm lý, Hài"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_manage_release"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Khởi chiếu: 26/04/2024"
+                android:textColor="#666666"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Đường nét đứt gạch ngang -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="10dp"
+        android:background="#E0E0E0" />
+
+    <!-- ===== SUẤT CHIẾU HÔM NAY ===== -->
+    <TextView
+        android:id="@+id/tv_showtime_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SUẤT CHIẾU HÔM NAY (30/09) - RẠP 03:"
+        android:textColor="#1A1A1A"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/layout_showtime_slots"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Slot 1 -->
+        <LinearLayout
+            android:id="@+id/slot1_bg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/bg_info_box_border"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tv_slot1_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="18:00"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_slot1_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Còn 35/50 ghế"
+                android:textColor="#2E7D32"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Slot 2 (Đã kín) -->
+        <LinearLayout
+            android:id="@+id/slot2_bg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_button_light_red"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tv_slot2_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20:00"
+                android:textColor="#D32F2F"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_slot2_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ĐÃ KÍN CHỖ"
+                android:textColor="#D32F2F"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Slot 3 -->
+        <LinearLayout
+            android:id="@+id/slot3_bg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_info_box_border"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="6dp">
+
+            <TextView
+                android:id="@+id/tv_slot3_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22:15"
+                android:textColor="#000000"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_slot3_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Còn 48/50 ghế"
+                android:textColor="#2E7D32"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Nút + Suất mới -->
+        <TextView
+            android:id="@+id/btn_add_showtime"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="#1A1A1A"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="+ SUẤT MỚI"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- ===== NÚT THAO TÁC QUẢN LÝ ===== -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="horizontal">
+
+        <!-- Nút ĐIỀU CHỈNH SUẤT CHIẾU (Nền đen) -->
+        <TextView
+            android:id="@+id/btn_adjust_showtimes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:background="@drawable/bg_card_rounded"
+            android:backgroundTint="#1A1A1A"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="ĐIỀU CHỈNH SUẤT"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Nút SỬA PHIM (Nền trắng viền xám) -->
+        <TextView
+            android:id="@+id/btn_edit_movie"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_button_outline"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="SỬA PHIM"
+            android:textColor="#333333"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Nút TẮT / BẬT (Nền đỏ nhạt, chữ đỏ) -->
+        <TextView
+            android:id="@+id/btn_toggle_visibility"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="0.8"
+            android:background="@drawable/bg_button_light_red"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="TẮT"
+            android:textColor="#D32F2F"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Nút Mũi tên < (Ngày trước đó) -->
+        <TextView
+            android:id="@+id/btn_prev_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_button_outline"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="❮"
+            android:textColor="#333333"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Nút Mũi tên > (Ngày tiếp theo) -->
+        <TextView
+            android:id="@+id/btn_next_day"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_weight="0.5"
+            android:background="@drawable/bg_button_outline"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="❯"
+            android:textColor="#333333"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>

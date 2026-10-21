@@ -74,11 +74,15 @@ public class ProfileActivity extends AppCompatActivity {
         if (!isAdmin) return;
 
         findViewById(R.id.row_dashboard).setOnClickListener(v -> {
-            Toast.makeText(this, "Dashboard (chưa làm)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
 
         findViewById(R.id.row_manage_movies).setOnClickListener(v -> {
-            Toast.makeText(this, "Quản lí phim (chưa làm)", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(ProfileActivity.this, ManageMoviesActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         });
     }
 
