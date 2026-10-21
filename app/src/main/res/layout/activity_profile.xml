@@ -351,8 +351,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:checked="true"
-                        app:thumbTint="#FFFFFF"
-                        app:trackTint="#D32F2F" />
+                        android:thumbTint="@color/switch_thumb_tint"
+                        android:trackTint="@color/switch_track_tint"
+                        app:thumbTint="@color/switch_thumb_tint"
+                        app:trackTint="@color/switch_track_tint" />
                 </LinearLayout>
 
                 <View

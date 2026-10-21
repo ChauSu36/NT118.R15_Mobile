@@ -105,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity {
         if (switchNotification != null) {
             switchNotification.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 Toast.makeText(this,
-                        isChecked ? "Đã bật thông báo" : "Đã tắt thông báo",
+                        isChecked ? "Đã BẬT thông báo nhắc lịch chiếu" : "Đã TẮT thông báo nhắc lịch chiếu",
                         Toast.LENGTH_SHORT).show();
             });
         }
