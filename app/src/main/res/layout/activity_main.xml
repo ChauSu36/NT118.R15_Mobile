@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,21 +24,17 @@
         android:id="@+id/tvBannerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="12dp"
-
         android:fontFamily="sans-serif-condensed"
-        android:text="BOOKING MOVIE TICKETS"
-        android:textColor="#90AEA2"
-        android:textSize="30sp"
-        android:textStyle="bold"
         android:letterSpacing="0.04"
-
         android:shadowColor="#CC000000"
         android:shadowDx="0"
         android:shadowDy="2"
         android:shadowRadius="3"
-
+        android:text="BOOKING MOVIE TICKETS"
+        android:textColor="#90AEA2"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -151,23 +148,39 @@
         app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
         app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
 
-    <!-- Ô nhập Password -->
-    <EditText
-        android:id="@+id/edtPassword"
+    <!-- Ô nhập Password (Kèm Icon Con Mắt) -->
+    <RelativeLayout
+        android:id="@+id/containerPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#B0B0B0"
-        android:hint="Mật Khẩu"
-        android:inputType="textPassword"
-        android:paddingBottom="12dp"
-        android:textColor="#000000"
-        android:textColorHint="#B0B0B0"
-        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvLoginTitle"
-        app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+        app:layout_constraintTop_toBottomOf="@id/edtEmail">
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/ivTogglePassword"
+            android:backgroundTint="#B0B0B0"
+            android:hint="Mật Khẩu"
+            android:inputType="textPassword"
+            android:paddingBottom="12dp"
+            android:textColor="#000000"
+            android:textColorHint="#B0B0B0"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/ivTogglePassword"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:padding="4dp"
+            android:src="@drawable/ic_eye_invisible" />
+    </RelativeLayout>
 
     <!-- Quên mật khẩu -->
     <TextView
@@ -179,8 +192,8 @@
         android:text="Quên mật khẩu?"
         android:textColor="#000000"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@id/edtPassword"
-        app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+        app:layout_constraintEnd_toEndOf="@id/containerPassword"
+        app:layout_constraintTop_toBottomOf="@id/containerPassword" />
 
     <!-- Nút LOGIN Đỏ -->
     <com.google.android.material.button.MaterialButton
@@ -195,8 +208,8 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:cornerRadius="28dp"
-        app:layout_constraintEnd_toEndOf="@id/edtPassword"
-        app:layout_constraintStart_toStartOf="@id/edtPassword"
+        app:layout_constraintEnd_toEndOf="@id/containerPassword"
+        app:layout_constraintStart_toStartOf="@id/containerPassword"
         app:layout_constraintTop_toBottomOf="@id/tvForgotPassword" />
 
     <!-- Dòng chữ Đăng ký -->

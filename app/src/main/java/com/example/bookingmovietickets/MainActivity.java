@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,6 +19,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
+
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,25 @@ public class MainActivity extends AppCompatActivity {
                 tvBannerTitle.invalidate();
             });
         }
+
+        // Bật/tắt hiển thị mật khẩu bằng icon con mắt
+        EditText edtPassword = findViewById(R.id.edtPassword);
+        ImageView ivTogglePassword = findViewById(R.id.ivTogglePassword);
+
+        if (ivTogglePassword != null && edtPassword != null) {
+            ivTogglePassword.setOnClickListener(v -> {
+                isPasswordVisible = !isPasswordVisible;
+                if (isPasswordVisible) {
+                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    ivTogglePassword.setImageResource(R.drawable.ic_eye_visible);
+                } else {
+                    edtPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    ivTogglePassword.setImageResource(R.drawable.ic_eye_invisible);
+                }
+                edtPassword.setSelection(edtPassword.getText().length());
+            });
+        }
+
         LinearLayout llSignUp = findViewById(R.id.llSignUp);
         if (llSignUp != null) {
             llSignUp.setOnClickListener(v -> {

@@ -3,10 +3,12 @@ package com.example.bookingmovietickets;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -36,9 +38,13 @@ public class SignUpActivity extends AppCompatActivity {
     // 1. Khai báo các thành phần giao diện
     private EditText edtFullName, edtDob, edtPhone;
     private EditText edtEmail, edtPassword, edtConfirmPassword;
+    private ImageView ivTogglePassword, ivToggleConfirmPassword;
     private RadioGroup rgGender;
     private MaterialButton btnSignUp;
     private LinearLayout llLogIn;
+
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,15 +88,18 @@ public class SignUpActivity extends AppCompatActivity {
         // 2. Ánh xạ các thành phần từ file XML qua ID
         bindViews();
 
-        // 3. Mở BottomSheet chọn ngày sinh từ dưới lên khi bấm vào ô Date of Birth
+        // 3. Cài đặt bật/tắt hiển thị mật khẩu bằng icon con mắt
+        setupPasswordToggles();
+
+        // 4. Mở BottomSheet chọn ngày sinh từ dưới lên khi bấm vào ô Date of Birth
         setupDatePicker();
 
-        // 4. Xử lý logic khi người dùng bấm nút "Sign Up"
+        // 5. Xử lý logic khi người dùng bấm nút "Sign Up"
         if (btnSignUp != null) {
             btnSignUp.setOnClickListener(v -> handleSignUp());
         }
 
-        // 5. Xử lý khi nhấn chữ "Log in" để quay lại màn hình Đăng nhập
+        // 6. Xử lý khi nhấn chữ "Log in" để quay lại màn hình Đăng nhập
         if (llLogIn != null) {
             llLogIn.setOnClickListener(v -> {
                 finish();
@@ -105,18 +114,42 @@ public class SignUpActivity extends AppCompatActivity {
         rgGender = findViewById(R.id.rgGender);
         edtPhone = findViewById(R.id.edtPhone);
         edtEmail = findViewById(R.id.edtEmail);
+
         edtPassword = findViewById(R.id.edtPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+        ivTogglePassword = findViewById(R.id.ivTogglePassword);
+        ivToggleConfirmPassword = findViewById(R.id.ivToggleConfirmPassword);
+
         btnSignUp = findViewById(R.id.btnSignUp);
         llLogIn = findViewById(R.id.llLogIn);
+    }
 
-        // Tối ưu gõ trực tiếp từ bàn phím Macbook/Máy tính không bị chắn bởi bàn phím ảo
-        if (edtPassword != null) {
-            edtPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+    /** Cài đặt sự kiện con mắt bật/tắt hiển thị mật khẩu. */
+    private void setupPasswordToggles() {
+        if (ivTogglePassword != null && edtPassword != null) {
+            ivTogglePassword.setOnClickListener(v -> {
+                isPasswordVisible = !isPasswordVisible;
+                toggleVisibility(edtPassword, ivTogglePassword, isPasswordVisible);
+            });
         }
-        if (edtConfirmPassword != null) {
-            edtConfirmPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+
+        if (ivToggleConfirmPassword != null && edtConfirmPassword != null) {
+            ivToggleConfirmPassword.setOnClickListener(v -> {
+                isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                toggleVisibility(edtConfirmPassword, ivToggleConfirmPassword, isConfirmPasswordVisible);
+            });
         }
+    }
+
+    private void toggleVisibility(EditText editText, ImageView toggleIcon, boolean isVisible) {
+        if (isVisible) {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            toggleIcon.setImageResource(R.drawable.ic_eye_visible);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            toggleIcon.setImageResource(R.drawable.ic_eye_invisible);
+        }
+        editText.setSelection(editText.getText().length());
     }
 
     /**

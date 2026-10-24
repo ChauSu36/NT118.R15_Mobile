@@ -285,50 +285,79 @@
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtPhone" />
 
-        <!-- 6. PASSWORD (Tối ưu nhập từ bàn phím Macbook) -->
-        <EditText
-            android:id="@+id/edtPassword"
+        <!-- 6. PASSWORD (Kèm Icon Con Mắt) -->
+        <RelativeLayout
+            android:id="@+id/containerPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="14dp"
-            android:backgroundTint="#B0B0B0"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:hint="Mật khẩu"
-            android:importantForAutofill="no"
-            android:imeOptions="actionNext"
-            android:inputType="text|textNoSuggestions"
-            android:paddingBottom="10dp"
-            android:textColor="#000000"
-            android:textColorHint="#B0B0B0"
-            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
-            app:layout_constraintTop_toBottomOf="@id/edtEmail" />
+            app:layout_constraintTop_toBottomOf="@id/edtEmail">
 
-        <!-- 7. CONFIRM PASSWORD (Tối ưu nhập từ bàn phím Macbook) -->
-        <EditText
-            android:id="@+id/edtConfirmPassword"
+            <EditText
+                android:id="@+id/edtPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/ivTogglePassword"
+                android:backgroundTint="#B0B0B0"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="Mật khẩu"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:paddingBottom="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#B0B0B0"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/ivTogglePassword"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_eye_invisible" />
+        </RelativeLayout>
+
+        <!-- 7. CONFIRM PASSWORD (Kèm Icon Con Mắt) -->
+        <RelativeLayout
+            android:id="@+id/containerConfirmPassword"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:backgroundTint="#B0B0B0"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:hint="Xác nhận mật khẩu"
-            android:importantForAutofill="no"
-            android:imeOptions="actionDone"
-            android:inputType="text|textNoSuggestions"
-            android:paddingBottom="10dp"
-            android:textColor="#000000"
-            android:textColorHint="#B0B0B0"
-            android:textSize="14sp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
-            app:layout_constraintTop_toBottomOf="@id/edtPassword" />
+            app:layout_constraintTop_toBottomOf="@id/containerPassword">
+
+            <EditText
+                android:id="@+id/edtConfirmPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/ivToggleConfirmPassword"
+                android:backgroundTint="#B0B0B0"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="Xác nhận mật khẩu"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingBottom="10dp"
+                android:textColor="#000000"
+                android:textColorHint="#B0B0B0"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:id="@+id/ivToggleConfirmPassword"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:padding="4dp"
+                android:src="@drawable/ic_eye_invisible" />
+        </RelativeLayout>
 
         <!-- NÚT SIGN UP -->
         <com.google.android.material.button.MaterialButton
@@ -343,9 +372,9 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:cornerRadius="26dp"
-            app:layout_constraintEnd_toEndOf="@id/edtConfirmPassword"
-            app:layout_constraintStart_toStartOf="@id/edtConfirmPassword"
-            app:layout_constraintTop_toBottomOf="@id/edtConfirmPassword" />
+            app:layout_constraintEnd_toEndOf="@id/containerConfirmPassword"
+            app:layout_constraintStart_toStartOf="@id/containerConfirmPassword"
+            app:layout_constraintTop_toBottomOf="@id/containerConfirmPassword" />
 
         <!-- LIÊN KẾT LOG IN -->
         <LinearLayout

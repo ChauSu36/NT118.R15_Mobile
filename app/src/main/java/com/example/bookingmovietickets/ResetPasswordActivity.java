@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,8 +20,14 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.button.MaterialButton;
 
 public class ResetPasswordActivity extends AppCompatActivity {
+
     private EditText edtEmail, edtNewPassword, edtConfirmPassword;
+    private ImageView ivToggleNewPassword, ivToggleConfirmPassword;
     private MaterialButton btnResetPassword;
+
+    private boolean isNewPassVisible = false;
+    private boolean isConfirmPassVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +38,7 @@ public class ResetPasswordActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         TextView tvBannerTitle = findViewById(R.id.tvBannerTitle);
         if (tvBannerTitle != null) {
             tvBannerTitle.post(() -> {
@@ -49,12 +58,20 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 tvBannerTitle.invalidate();
             });
         }
+
         // Ánh xạ
         edtEmail = findViewById(R.id.edtEmail);
         edtNewPassword = findViewById(R.id.edtNewPassword);
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
+
+        ivToggleNewPassword = findViewById(R.id.ivToggleNewPassword);
+        ivToggleConfirmPassword = findViewById(R.id.ivToggleConfirmPassword);
+
         btnResetPassword = findViewById(R.id.btnResetPassword);
         TextView btnBack = findViewById(R.id.btnBack);
+
+        // Bật/tắt hiển thị mật khẩu bằng icon con mắt
+        setupPasswordToggles();
 
         // Xử lý khi nhấn nút Reset
         btnResetPassword.setOnClickListener(v -> {
@@ -83,5 +100,32 @@ public class ResetPasswordActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
+    }
+
+    private void setupPasswordToggles() {
+        if (ivToggleNewPassword != null && edtNewPassword != null) {
+            ivToggleNewPassword.setOnClickListener(v -> {
+                isNewPassVisible = !isNewPassVisible;
+                toggleVisibility(edtNewPassword, ivToggleNewPassword, isNewPassVisible);
+            });
+        }
+
+        if (ivToggleConfirmPassword != null && edtConfirmPassword != null) {
+            ivToggleConfirmPassword.setOnClickListener(v -> {
+                isConfirmPassVisible = !isConfirmPassVisible;
+                toggleVisibility(edtConfirmPassword, ivToggleConfirmPassword, isConfirmPassVisible);
+            });
+        }
+    }
+
+    private void toggleVisibility(EditText editText, ImageView toggleIcon, boolean isVisible) {
+        if (isVisible) {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            toggleIcon.setImageResource(R.drawable.ic_eye_visible);
+        } else {
+            editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            toggleIcon.setImageResource(R.drawable.ic_eye_invisible);
+        }
+        editText.setSelection(editText.getText().length());
     }
 }
