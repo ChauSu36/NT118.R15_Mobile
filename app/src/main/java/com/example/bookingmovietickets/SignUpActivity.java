@@ -21,9 +21,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 
 import java.util.Calendar;
 import java.util.Locale;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -76,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity {
         // 2. Ánh xạ các thành phần từ file XML qua ID
         bindViews();
 
-        // 3. Mở BottomSheet chọn ngày sinh từ dưới lên khi bấm vào ô Date of Birth (hoặc mũi tên)
+        // 3. Mở BottomSheet chọn ngày sinh từ dưới lên khi bấm vào ô Date of Birth
         setupDatePicker();
 
         // 4. Xử lý logic khi người dùng bấm nút "Sign Up"
@@ -103,6 +109,14 @@ public class SignUpActivity extends AppCompatActivity {
         edtConfirmPassword = findViewById(R.id.edtConfirmPassword);
         btnSignUp = findViewById(R.id.btnSignUp);
         llLogIn = findViewById(R.id.llLogIn);
+
+        // Tối ưu gõ trực tiếp từ bàn phím Macbook/Máy tính không bị chắn bởi bàn phím ảo
+        if (edtPassword != null) {
+            edtPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+        }
+        if (edtConfirmPassword != null) {
+            edtConfirmPassword.setTransformationMethod(android.text.method.PasswordTransformationMethod.getInstance());
+        }
     }
 
     /**
@@ -123,7 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
         DatePicker datePicker = dialogView.findViewById(R.id.datePicker);
         Button btnConfirm = dialogView.findViewById(R.id.btnConfirmDate);
 
-        // Mặc định chọn ngày hiện tại hoặc 01/01/2000
+        // Mặc định chọn ngày 01/01/2000
         if (datePicker != null) {
             Calendar cal = Calendar.getInstance();
             cal.set(2000, Calendar.JANUARY, 1);
@@ -151,15 +165,16 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void handleSignUp() {
         String fullName = edtFullName != null ? edtFullName.getText().toString().trim() : "";
-        String dob = edtDob != null ? edtDob.getText().toString().trim() : "";
+        String rawDob = edtDob != null ? edtDob.getText().toString().trim() : "";
         String phone = edtPhone != null ? edtPhone.getText().toString().trim() : "";
         String email = edtEmail != null ? edtEmail.getText().toString().trim() : "";
         String password = edtPassword != null ? edtPassword.getText().toString().trim() : "";
         String confirmPassword = edtConfirmPassword != null ? edtConfirmPassword.getText().toString().trim() : "";
 
-        if (fullName.isEmpty() || dob.isEmpty() || phone.isEmpty()
+        // 1. Validation kiểm tra nhập đủ thông tin
+        if (fullName.isEmpty() || rawDob.isEmpty() || phone.isEmpty()
                 || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-            Toast.makeText(SignUpActivity.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignUpActivity.this, "Thiếu thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -168,18 +183,66 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        // 2. Chuyển định dạng ngày sinh từ DD/MM/YYYY hoặc DDMMYYYY thành YYYY-MM-DD cho chuẩn Backend MySQL
+        String formattedDob = rawDob;
+        if (rawDob.contains("/")) {
+            String[] parts = rawDob.split("/");
+            if (parts.length == 3) {
+                formattedDob = String.format(Locale.getDefault(), "%s-%s-%s", parts[2], parts[1], parts[0]);
+            }
+        } else if (rawDob.length() == 8 && !rawDob.contains("-")) {
+            String day = rawDob.substring(0, 2);
+            String month = rawDob.substring(2, 4);
+            String year = rawDob.substring(4, 8);
+            formattedDob = String.format(Locale.getDefault(), "%s-%s-%s", year, month, day);
+        }
+
         String gender = getSelectedGender();
 
-        Toast.makeText(SignUpActivity.this, "Đăng ký tài khoản thành công!", Toast.LENGTH_SHORT).show();
-        finish();
-        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        // 3. Đóng gói dữ liệu vào RegisterRequest
+        RegisterRequest request = new RegisterRequest(fullName, email, password, phone, gender, formattedDob);
+
+        // 4. Gọi API Đăng ký người dùng qua Retrofit POST /api/users
+        ApiClient.getApiService().registerUser(request).enqueue(new Callback<RegisterResponse>() {
+            @Override
+            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    RegisterResponse res = response.body();
+                    String message = res.getThongBao() != null ? res.getThongBao() : "Đăng ký thành công!";
+                    Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                    // Đăng ký thành công -> Đóng màn hình đăng ký và chuyển về Đăng nhập
+                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                } else {
+                    // Parse thongBao từ errorBody() khi nhận mã lỗi HTTP 400 hoặc 409 từ Backend Node.js
+                    try (ResponseBody errorBody = response.errorBody()) {
+                        if (errorBody != null) {
+                            String errJson = errorBody.string();
+                            RegisterResponse errRes = new Gson().fromJson(errJson, RegisterResponse.class);
+                            if (errRes != null && errRes.getThongBao() != null && !errRes.getThongBao().isEmpty()) {
+                                Toast.makeText(SignUpActivity.this, errRes.getThongBao(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    Toast.makeText(SignUpActivity.this, "Đăng ký thất bại hoặc Email này đã tồn tại!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                Toast.makeText(SignUpActivity.this, "Lỗi kết nối Server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private String getSelectedGender() {
-        if (rgGender == null) return "Male";
+        if (rgGender == null) return "nam";
         int checkedId = rgGender.getCheckedRadioButtonId();
-        if (checkedId == R.id.rbFemale) return "Female";
-        if (checkedId == R.id.rbOther) return "Other";
-        return "Male";
+        if (checkedId == R.id.rbFemale) return "nu";
+        if (checkedId == R.id.rbOther) return "khac";
+        return "nam";
     }
 }

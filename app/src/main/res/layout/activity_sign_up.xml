@@ -142,8 +142,11 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="20dp"
             android:backgroundTint="#B0B0B0"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Tên đầy đủ"
-            android:inputType="textPersonName"
+            android:imeOptions="actionNext"
+            android:inputType="textPersonName|textCapWords"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
@@ -161,12 +164,14 @@
             android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
             android:clickable="true"
-            android:cursorVisible="false"
+            android:cursorVisible="true"
             android:drawableEnd="@android:drawable/arrow_down_float"
             android:drawableTint="#9E9E9E"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="Ngày sinh"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Ngày sinh (DD/MM/YYYY)"
+            android:imeOptions="actionNext"
+            android:inputType="date"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
@@ -175,7 +180,7 @@
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtFullName" />
 
-        <!-- 3. GENDER (Male, Female, Other - buttonTint=#B71C1C) -->
+        <!-- 3. GENDER (Male, Female, Other) -->
         <LinearLayout
             android:id="@+id/llGender"
             android:layout_width="0dp"
@@ -246,7 +251,10 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="#B0B0B0"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Số điện thoại"
+            android:imeOptions="actionNext"
             android:inputType="phone"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -264,7 +272,10 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
-            android:hint="Địa chỉ "
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="Địa chỉ Email"
+            android:imeOptions="actionNext"
             android:inputType="textEmailAddress"
             android:paddingBottom="10dp"
             android:textColor="#000000"
@@ -274,7 +285,7 @@
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtPhone" />
 
-        <!-- 6. PASSWORD -->
+        <!-- 6. PASSWORD (Tối ưu nhập từ bàn phím Macbook) -->
         <EditText
             android:id="@+id/edtPassword"
             android:layout_width="0dp"
@@ -282,8 +293,12 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="14dp"
             android:backgroundTint="#B0B0B0"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Mật khẩu"
-            android:inputType="textPassword"
+            android:importantForAutofill="no"
+            android:imeOptions="actionNext"
+            android:inputType="text|textNoSuggestions"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
@@ -292,10 +307,7 @@
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtEmail" />
 
-        <!-- 7. CONFIRM PASSWORD -->
-
-        <!-- NÚT SIGN UP -->
-
+        <!-- 7. CONFIRM PASSWORD (Tối ưu nhập từ bàn phím Macbook) -->
         <EditText
             android:id="@+id/edtConfirmPassword"
             android:layout_width="0dp"
@@ -303,8 +315,12 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
             android:backgroundTint="#B0B0B0"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:hint="Xác nhận mật khẩu"
-            android:inputType="textPassword"
+            android:importantForAutofill="no"
+            android:imeOptions="actionDone"
+            android:inputType="text|textNoSuggestions"
             android:paddingBottom="10dp"
             android:textColor="#000000"
             android:textColorHint="#B0B0B0"
@@ -314,6 +330,7 @@
             app:layout_constraintStart_toStartOf="@id/tvSignUpTitle"
             app:layout_constraintTop_toBottomOf="@id/edtPassword" />
 
+        <!-- NÚT SIGN UP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             android:layout_width="0dp"
