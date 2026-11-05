@@ -8,4 +8,6 @@ public interface ApiService {
 
     @POST("api/users")
     Call<RegisterResponse> registerUser(@Body RegisterRequest request);
+    @POST("api/users/login")
+    Call<LoginResponse> dangNhap(@Body LoginRequest request);
 }

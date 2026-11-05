@@ -1,19 +1,17 @@
 package com.example.bookingmovietickets;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,17 +22,11 @@ import java.util.Locale;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    private TextView tvAvatarPlaceholder;
-    private ImageView ivAvatarPreview;
+    private ImageView btnBack;
+    private TextView tvAvatarPlaceholder, btnSave;
     private EditText etFullName, etPhone, etDob;
     private RadioGroup rgGender;
-
-    private final ActivityResultLauncher<String> pickImageLauncher =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    showPickedAvatar(uri);
-                }
-            });
+    private RadioButton rbMale, rbFemale, rbOther;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,98 +44,121 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         bindViews();
-        prefillCurrentData();
-        setupAvatarPicker();
-        setupDobPicker();
-        setupSaveButton();
-
-        // Nút quay lại (<) quay về màn hình Hồ sơ (ProfileActivity)
-        View btnBack = findViewById(R.id.btn_back);
-        if (btnBack != null) {
-            btnBack.setOnClickListener(v -> {
-                if (isTaskRoot()) {
-                    Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-                }
-                finish();
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            });
-        }
+        loadCurrentUserData();
+        setupDatePicker();
+        setupEvents();
     }
 
     private void bindViews() {
+        btnBack = findViewById(R.id.btn_back);
         tvAvatarPlaceholder = findViewById(R.id.tv_avatar_placeholder);
-        ivAvatarPreview = findViewById(R.id.iv_avatar_preview);
         etFullName = findViewById(R.id.et_full_name);
         etPhone = findViewById(R.id.et_phone);
         etDob = findViewById(R.id.et_dob);
         rgGender = findViewById(R.id.rg_gender);
+        rbMale = findViewById(R.id.rb_male);
+        rbFemale = findViewById(R.id.rb_female);
+        rbOther = findViewById(R.id.rb_other);
+        btnSave = findViewById(R.id.btn_save);
     }
 
-    private void prefillCurrentData() {
-        etDob.setText("01/01/2000");
+    private void loadCurrentUserData() {
+        // 1. Đọc dữ liệu từ SharedPreferences
+        SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
+        String fullName = pref.getString("FULL_NAME", "");
+        String phone = pref.getString("PHONE", "");
+        String gender = pref.getString("GENDER", "Nam");
+        String dob = pref.getString("DOB", "01/01/2000");
+
+        // 2. Điền thông tin vào giao diện
+        if (etFullName != null) etFullName.setText(fullName);
+        if (etPhone != null) etPhone.setText(phone);
+        if (etDob != null) etDob.setText(dob);
+
+        // Hiển thị Avatar dạng chữ cái đầu
+        if (tvAvatarPlaceholder != null && !fullName.isEmpty()) {
+            tvAvatarPlaceholder.setText(String.valueOf(fullName.charAt(0)).toUpperCase());
+        }
+
+        // Chọn RadioButton theo giới tính hiện tại
+        if (rgGender != null) {
+            if ("Nữ".equalsIgnoreCase(gender) || "nu".equalsIgnoreCase(gender)) {
+                if (rbFemale != null) rbFemale.setChecked(true);
+            } else if ("Khác".equalsIgnoreCase(gender) || "khac".equalsIgnoreCase(gender)) {
+                if (rbOther != null) rbOther.setChecked(true);
+            } else {
+                if (rbMale != null) rbMale.setChecked(true);
+            }
+        }
     }
 
-    private void setupAvatarPicker() {
-        View.OnClickListener openPicker = v -> pickImageLauncher.launch("image/*");
-        findViewById(R.id.btn_change_avatar).setOnClickListener(openPicker);
-        tvAvatarPlaceholder.setOnClickListener(openPicker);
-        ivAvatarPreview.setOnClickListener(openPicker);
-    }
+    private void setupDatePicker() {
+        if (etDob == null) return;
 
-    private void showPickedAvatar(Uri uri) {
-        ivAvatarPreview.setImageURI(uri);
-        ivAvatarPreview.setVisibility(View.VISIBLE);
-        tvAvatarPlaceholder.setVisibility(View.GONE);
-    }
-
-    private void setupDobPicker() {
         etDob.setOnClickListener(v -> {
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR);
             int month = calendar.get(Calendar.MONTH);
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dialog = new DatePickerDialog(this,
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    EditProfileActivity.this,
                     (view, selectedYear, selectedMonth, selectedDay) -> {
-                        String formatted = String.format(Locale.getDefault(),
-                                "%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
-                        etDob.setText(formatted);
-                    }, year, month, day);
-
-            dialog.show();
+                        // Định dạng ngày theo DD/MM/YYYY
+                        String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                        etDob.setText(formattedDate);
+                    },
+                    year, month, day
+            );
+            datePickerDialog.show();
         });
     }
 
-    private void setupSaveButton() {
-        findViewById(R.id.btn_save).setOnClickListener(v -> {
-            String fullName = etFullName.getText().toString().trim();
-            String phone = etPhone.getText().toString().trim();
+    private void setupEvents() {
+        // Nút quay lại (<)
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
+        }
 
-            if (fullName.isEmpty()) {
-                etFullName.setError("Vui lòng nhập họ tên");
-                return;
-            }
-            if (phone.isEmpty()) {
-                etPhone.setError("Vui lòng nhập số điện thoại");
-                return;
-            }
-
-            Toast.makeText(this, "Đã lưu thông tin thay đổi", Toast.LENGTH_SHORT).show();
-
-            if (isTaskRoot()) {
-                Intent intent = new Intent(EditProfileActivity.this, ProfileActivity.class);
-                startActivity(intent);
-            }
-            finish();
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        });
+        // Nút LƯU THAY ĐỔI
+        if (btnSave != null) {
+            btnSave.setOnClickListener(v -> saveUpdatedProfile());
+        }
     }
 
-    private String getSelectedGender() {
-        int checkedId = rgGender.getCheckedRadioButtonId();
-        if (checkedId == R.id.rb_female) return "Nữ";
-        if (checkedId == R.id.rb_other) return "Khác";
-        return "Nam";
+    private void saveUpdatedProfile() {
+        String newFullName = etFullName != null ? etFullName.getText().toString().trim() : "";
+        String newPhone = etPhone != null ? etPhone.getText().toString().trim() : "";
+        String newDob = etDob != null ? etDob.getText().toString().trim() : "";
+
+        if (newFullName.isEmpty() || newPhone.isEmpty()) {
+            Toast.makeText(this, "Họ tên và Số điện thoại không được để trống!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Xác định giới tính được chọn
+        String newGender = "Nam";
+        if (rgGender != null) {
+            int selectedId = rgGender.getCheckedRadioButtonId();
+            if (selectedId == R.id.rb_female) {
+                newGender = "Nữ";
+            } else if (selectedId == R.id.rb_other) {
+                newGender = "Khác";
+            }
+        }
+
+        // 3. Ghi đè thông tin mới vào SharedPreferences
+        SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("FULL_NAME", newFullName);
+        editor.putString("PHONE", newPhone);
+        editor.putString("GENDER", newGender);
+        editor.putString("DOB", newDob);
+        editor.apply();
+
+        Toast.makeText(this, "Cập nhật hồ sơ thành công!", Toast.LENGTH_SHORT).show();
+
+        // 4. Đóng Activity để quay về ProfileActivity
+        finish();
     }
 }

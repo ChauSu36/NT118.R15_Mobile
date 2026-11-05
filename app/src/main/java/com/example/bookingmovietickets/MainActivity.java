@@ -1,6 +1,7 @@
 package com.example.bookingmovietickets;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,8 +20,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.gson.Gson;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MainActivity extends AppCompatActivity {
 
+    private EditText edtEmail, edtPassword;
+    private View btnLogin;
     private boolean isPasswordVisible = false;
 
     @Override
@@ -27,12 +38,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
+        View mainView = findViewById(R.id.main);
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
+
+        bindViews();
+        setupBannerShader();
+        setupPasswordToggle();
+        setupNavigationLinks();
+
+        // Bắt sự kiện bấm nút Đăng nhập
+        if (btnLogin != null) {
+            btnLogin.setOnClickListener(v -> thuHienDangNhap());
+        }
+    }
+
+    private void bindViews() {
+        edtEmail = findViewById(R.id.edtEmail);
+        edtPassword = findViewById(R.id.edtPassword);
+        btnLogin = findViewById(R.id.btnLogin);
+    }
+
+    private void setupBannerShader() {
         TextView tvBannerTitle = findViewById(R.id.tvBannerTitle);
         if (tvBannerTitle != null) {
             tvBannerTitle.post(() -> {
@@ -52,11 +85,10 @@ public class MainActivity extends AppCompatActivity {
                 tvBannerTitle.invalidate();
             });
         }
+    }
 
-        // Bật/tắt hiển thị mật khẩu bằng icon con mắt
-        EditText edtPassword = findViewById(R.id.edtPassword);
+    private void setupPasswordToggle() {
         ImageView ivTogglePassword = findViewById(R.id.ivTogglePassword);
-
         if (ivTogglePassword != null && edtPassword != null) {
             ivTogglePassword.setOnClickListener(v -> {
                 isPasswordVisible = !isPasswordVisible;
@@ -70,7 +102,10 @@ public class MainActivity extends AppCompatActivity {
                 edtPassword.setSelection(edtPassword.getText().length());
             });
         }
+    }
 
+    private void setupNavigationLinks() {
+        // Chuyển sang màn hình Đăng ký
         LinearLayout llSignUp = findViewById(R.id.llSignUp);
         if (llSignUp != null) {
             llSignUp.setOnClickListener(v -> {
@@ -80,10 +115,8 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // Ánh xạ chữ Forgot Password
+        // Chuyển sang màn hình Quên mật khẩu
         TextView tvForgotPassword = findViewById(R.id.tvForgotPassword);
-
-        // Sự kiện bấm vào chữ Forgot Password -> Chuyển sang trang Reset
         if (tvForgotPassword != null) {
             tvForgotPassword.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, ResetPasswordActivity.class);
@@ -91,16 +124,68 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             });
         }
+    }
 
-        // Ánh xạ nút Đăng nhập
-        View btnLogin = findViewById(R.id.btnLogin);
-        if (btnLogin != null) {
-            btnLogin.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            });
+    private void thuHienDangNhap() {
+        String email = edtEmail != null ? edtEmail.getText().toString().trim() : "";
+        String password = edtPassword != null ? edtPassword.getText().toString().trim() : "";
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Vui lòng nhập Email và Mật khẩu!", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        LoginRequest request = new LoginRequest(email, password);
+
+        // Gọi API Đăng nhập qua Retrofit POST api/users/login
+        ApiClient.getApiService().dangNhap(request).enqueue(new Callback<LoginResponse>() {
+            @Override
+            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    LoginResponse res = response.body();
+
+                    // 1. Lưu JWT Token và thông tin User vào SharedPreferences
+                    SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
+                    SharedPreferences.Editor editor = pref.edit();
+                    editor.putString("JWT_TOKEN", res.getToken());
+                    if (res.getUser() != null) {
+                        editor.putInt("USER_ID", res.getUser().getUser_id());
+                        editor.putString("FULL_NAME", res.getUser().getFull_name());
+                        editor.putString("EMAIL", res.getUser().getEmail());
+                        editor.putString("PHONE", res.getUser().getPhone());
+                        editor.putString("ROLE", res.getUser().getRole());
+                    }
+                    editor.apply();
+
+                    String message = res.getThongBao() != null ? res.getThongBao() : "Đăng nhập thành công!";
+                    Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+                    // 2. Chuyển hướng sang Trang chủ HomeActivity
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                } else {
+                    // Đọc lỗi trả về từ Backend nếu có
+                    try (ResponseBody errorBody = response.errorBody()) {
+                        if (errorBody != null) {
+                            String errJson = errorBody.string();
+                            LoginResponse errRes = new Gson().fromJson(errJson, LoginResponse.class);
+                            if (errRes != null && errRes.getThongBao() != null && !errRes.getThongBao().isEmpty()) {
+                                Toast.makeText(MainActivity.this, errRes.getThongBao(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    Toast.makeText(MainActivity.this, "Email hoặc mật khẩu không chính xác!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LoginResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Lỗi kết nối máy chủ: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
