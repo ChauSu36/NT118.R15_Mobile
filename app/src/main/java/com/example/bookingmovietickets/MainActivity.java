@@ -144,18 +144,36 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse res = response.body();
 
-                    // 1. Lưu JWT Token và thông tin User vào SharedPreferences
-                    SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("JWT_TOKEN", res.getToken());
+                    // 1. Lưu JWT Token và toàn bộ thông tin User từ Database vào SharedPrefManager
                     if (res.getUser() != null) {
-                        editor.putInt("USER_ID", res.getUser().getUser_id());
-                        editor.putString("FULL_NAME", res.getUser().getFull_name());
-                        editor.putString("EMAIL", res.getUser().getEmail());
-                        editor.putString("PHONE", res.getUser().getPhone());
-                        editor.putString("ROLE", res.getUser().getRole());
+                        User u = res.getUser();
+                        SharedPrefManager pref = SharedPrefManager.getInstance(MainActivity.this);
+                        pref.saveUserSession(
+                                u.getUser_id(),
+                                u.getFull_name(),
+                                u.getEmail(),
+                                u.getPhone(),
+                                u.getRole(),
+                                res.getToken(),
+                                u.getAvatar_url()
+                        );
+                        if (u.getGender() != null && !u.getGender().isEmpty()) {
+                            pref.saveGender(u.getGender());
+                        }
+                        if (u.getDob() != null && !u.getDob().isEmpty()) {
+                            String rawDob = u.getDob();
+                            if (rawDob.contains("T")) {
+                                rawDob = rawDob.split("T")[0];
+                            }
+                            if (rawDob.contains("-")) {
+                                String[] parts = rawDob.split("-");
+                                if (parts.length == 3) {
+                                    rawDob = String.format("%s/%s/%s", parts[2], parts[1], parts[0]);
+                                }
+                            }
+                            pref.saveDob(rawDob);
+                        }
                     }
-                    editor.apply();
 
                     String message = res.getThongBao() != null ? res.getThongBao() : "Đăng nhập thành công!";
                     Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();

@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
     // ====== View ======
-    private TextView tvUsername;
+    private TextView tvAvatar, tvUsername;
+    private ImageView imgHomeAvatar;
     private ViewPager2 vpBanner;
     private LinearLayout layoutDots;
     private TextView tabNowShowing, tabComingSoon;
@@ -59,7 +62,15 @@ public class HomeActivity extends AppCompatActivity {
         setupBottomNav();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setupHeader();
+    }
+
     private void bindViews() {
+        tvAvatar = findViewById(R.id.tv_avatar);
+        imgHomeAvatar = findViewById(R.id.imgHomeAvatar);
         tvUsername = findViewById(R.id.tv_username);
         vpBanner = findViewById(R.id.vp_banner);
         layoutDots = findViewById(R.id.layout_dots);
@@ -85,7 +96,29 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupHeader() {
-        tvUsername.setText("Nguyễn Văn A");
+        SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
+        String fullName = prefManager.getFullName();
+        String avatarUrl = prefManager.getAvatarUrl();
+
+        if (tvUsername != null) {
+            tvUsername.setText(fullName);
+        }
+
+        if (avatarUrl != null && !avatarUrl.isEmpty() && imgHomeAvatar != null) {
+            imgHomeAvatar.setVisibility(View.VISIBLE);
+            if (tvAvatar != null) tvAvatar.setVisibility(View.GONE);
+
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.bg_avatar_circle)
+                    .error(R.drawable.bg_avatar_circle)
+                    .circleCrop()
+                    .into(imgHomeAvatar);
+        } else if (tvAvatar != null && fullName != null && !fullName.isEmpty()) {
+            tvAvatar.setVisibility(View.VISIBLE);
+            if (imgHomeAvatar != null) imgHomeAvatar.setVisibility(View.GONE);
+            tvAvatar.setText(String.valueOf(fullName.charAt(0)).toUpperCase());
+        }
     }
 
     private void setupBanner() {

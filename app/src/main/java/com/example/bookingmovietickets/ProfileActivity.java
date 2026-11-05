@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,13 +16,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
+
 public class ProfileActivity extends AppCompatActivity {
 
     private boolean isAdmin = false;
 
     private TextView tvAvatar, tvName, tvEmail, tvPhone, tvRoleBadge, tvGender, tvDob;
+    private ImageView ivAvatarProfile;
     private View layoutAdminSection, labelAdmin;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +48,17 @@ public class ProfileActivity extends AppCompatActivity {
         setupLogout();
         setupBottomNav();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         setupUserInfo(); // Tự động load lại dữ liệu mới khi quay lại từ EditProfileActivity
     }
+
     private void bindViews() {
         tvAvatar = findViewById(R.id.tv_avatar);
-        tvName = findViewById(R.id.tv_name); // Hoặc R.id.tv_user_name tùy layout XML
+        ivAvatarProfile = findViewById(R.id.iv_avatar_profile);
+        tvName = findViewById(R.id.tv_name);
         tvEmail = findViewById(R.id.tv_email);
         tvPhone = findViewById(R.id.tv_phone);
         tvRoleBadge = findViewById(R.id.tv_role_badge);
@@ -63,14 +69,15 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupUserInfo() {
-        // 1. Đọc dữ liệu đã lưu khi đăng nhập từ SharedPreferences
-        SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
-        String fullName = pref.getString("FULL_NAME", "Người dùng");
-        String email = pref.getString("EMAIL", "Chưa có email");
-        String phone = pref.getString("PHONE", "Chưa có SĐT");
-        String gender = pref.getString("GENDER", "Chưa cập nhật");
-        String dob = pref.getString("DOB", "Chưa cập nhật");
-        String role = pref.getString("ROLE", "user");
+        // 1. Đọc dữ liệu đã lưu khi đăng nhập từ SharedPrefManager
+        SharedPrefManager pref = SharedPrefManager.getInstance(this);
+        String fullName = pref.getFullName();
+        String email = pref.getEmail();
+        String phone = pref.getPhone();
+        String gender = pref.getGender();
+        String dob = pref.getDob();
+        String role = pref.getRole();
+        String avatarUrl = pref.getAvatarUrl();
 
         // 2. Phân quyền Admin
         isAdmin = "admin".equalsIgnoreCase(role);
@@ -82,8 +89,20 @@ public class ProfileActivity extends AppCompatActivity {
         if (tvGender != null) tvGender.setText("Giới tính: " + gender);
         if (tvDob != null) tvDob.setText("Ngày sinh: " + dob);
 
-        // Nạp chữ cái đầu của Tên làm Avatar
-        if (tvAvatar != null && fullName != null && !fullName.isEmpty()) {
+        // Nạp Avatar (ảnh từ Glide nếu có, hoặc chữ cái đầu tên)
+        if (avatarUrl != null && !avatarUrl.isEmpty() && ivAvatarProfile != null) {
+            ivAvatarProfile.setVisibility(View.VISIBLE);
+            if (tvAvatar != null) tvAvatar.setVisibility(View.GONE);
+
+            Glide.with(this)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.bg_avatar_circle)
+                    .error(R.drawable.bg_avatar_circle)
+                    .circleCrop()
+                    .into(ivAvatarProfile);
+        } else if (tvAvatar != null && fullName != null && !fullName.isEmpty()) {
+            tvAvatar.setVisibility(View.VISIBLE);
+            if (ivAvatarProfile != null) ivAvatarProfile.setVisibility(View.GONE);
             tvAvatar.setText(String.valueOf(fullName.charAt(0)).toUpperCase());
         }
 
@@ -94,6 +113,7 @@ public class ProfileActivity extends AppCompatActivity {
         View btnEdit = findViewById(R.id.btn_edit_profile);
         if (btnEdit != null) btnEdit.setOnClickListener(v -> openEditProfile());
         if (tvAvatar != null) tvAvatar.setOnClickListener(v -> openEditProfile());
+        if (ivAvatarProfile != null) ivAvatarProfile.setOnClickListener(v -> openEditProfile());
     }
 
     private void openEditProfile() {
@@ -180,9 +200,8 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void performLogout() {
-        // 1. Xóa sạch dữ liệu đăng nhập trong SharedPreferences
-        SharedPreferences pref = getSharedPreferences("UserSession", MODE_PRIVATE);
-        pref.edit().clear().apply();
+        // 1. Xóa sạch dữ liệu đăng nhập trong SharedPrefManager
+        SharedPrefManager.getInstance(this).clearSession();
 
         Toast.makeText(this, "Đã đăng xuất tài khoản!", Toast.LENGTH_SHORT).show();
 
