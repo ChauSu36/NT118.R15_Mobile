@@ -19,6 +19,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.gson.Gson;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ChangePasswordActivity extends AppCompatActivity {
 
     private ImageView btnBack;
@@ -206,23 +213,69 @@ public class ChangePasswordActivity extends AppCompatActivity {
         String newPass = etNewPassword != null ? etNewPassword.getText().toString().trim() : "";
         String confirmPass = etConfirmPassword != null ? etConfirmPassword.getText().toString().trim() : "";
 
+        // 1. Kiểm tra không được để rỗng
         if (currentPass.isEmpty() || newPass.isEmpty() || confirmPass.isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (newPass.length() < 8) {
-            Toast.makeText(this, "Mật khẩu mới phải có ít nhất 8 ký tự!", Toast.LENGTH_SHORT).show();
+        // 2. Kiểm tra các tiêu chí mật khẩu mới
+        boolean hasMinLength = newPass.length() >= 8;
+        boolean hasDigit = newPass.matches(".*\\d.*");
+        boolean hasUppercase = newPass.matches(".*[A-Z].*");
+        boolean hasSpecial = newPass.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?].*");
+
+        if (!hasMinLength || !hasDigit || !hasUppercase || !hasSpecial) {
+            Toast.makeText(this, "Mật khẩu mới chưa đáp ứng đầy đủ yêu cầu bảo mật!", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // 3. Kiểm tra mật khẩu xác nhận
         if (!newPass.equals(confirmPass)) {
             Toast.makeText(this, "Mật khẩu xác nhận không trùng khớp!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(this, "Đổi mật khẩu thành công!", Toast.LENGTH_SHORT).show();
-        closeActivity();
+        // 4. Lấy user_id của tài khoản đang đăng nhập
+        int userId = SharedPrefManager.getInstance(this).getUserId();
+        if (userId == -1) {
+            Toast.makeText(this, "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // 5. Đóng gói dữ liệu và gọi API Đổi mật khẩu qua Retrofit POST api/users/change-password
+        ChangePasswordRequest request = new ChangePasswordRequest(userId, currentPass, newPass);
+
+        ApiClient.getApiService().changePassword(request).enqueue(new Callback<ChangePasswordResponse>() {
+            @Override
+            public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ChangePasswordResponse res = response.body();
+                    String msg = res.getThongBao() != null ? res.getThongBao() : "Đổi mật khẩu thành công!";
+                    Toast.makeText(ChangePasswordActivity.this, msg, Toast.LENGTH_LONG).show();
+                    closeActivity();
+                } else {
+                    // Đọc lỗi chi tiết trả về từ Backend (Mật khẩu hiện tại sai hoặc trùng mật khẩu cũ)
+                    try (ResponseBody errorBody = response.errorBody()) {
+                        if (errorBody != null) {
+                            String errJson = errorBody.string();
+                            ChangePasswordResponse errRes = new Gson().fromJson(errJson, ChangePasswordResponse.class);
+                            if (errRes != null && errRes.getThongBao() != null && !errRes.getThongBao().isEmpty()) {
+                                Toast.makeText(ChangePasswordActivity.this, errRes.getThongBao(), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ChangePasswordResponse> call, Throwable t) {
+                Toast.makeText(ChangePasswordActivity.this, "Lỗi kết nối máy chủ: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void closeActivity() {

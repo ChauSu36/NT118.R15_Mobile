@@ -25,4 +25,7 @@ public interface ApiService {
 
     @POST("api/users/update-profile")
     Call<UpdateProfileResponse> updateProfile(@Body UpdateProfileRequest request);
+
+    @POST("api/users/change-password")
+    Call<ChangePasswordResponse> changePassword(@Body ChangePasswordRequest request);
 }
