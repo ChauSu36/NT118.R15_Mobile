@@ -236,17 +236,19 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // 4. Lấy user_id của tài khoản đang đăng nhập
-        int userId = SharedPrefManager.getInstance(this).getUserId();
-        if (userId == -1) {
-            Toast.makeText(this, "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+        // 4. Lấy JWT Token từ SharedPrefManager
+        String jwtToken = SharedPrefManager.getInstance(this).getJwtToken();
+        if (jwtToken == null || jwtToken.isEmpty()) {
+            Toast.makeText(this, "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // 5. Đóng gói dữ liệu và gọi API Đổi mật khẩu qua Retrofit POST api/users/change-password
-        ChangePasswordRequest request = new ChangePasswordRequest(userId, currentPass, newPass);
+        String authHeader = "Bearer " + jwtToken;
 
-        ApiClient.getApiService().changePassword(request).enqueue(new Callback<ChangePasswordResponse>() {
+        // 5. Đóng gói dữ liệu (không cần user_id) và gọi API Đổi mật khẩu
+        ChangePasswordRequest request = new ChangePasswordRequest(currentPass, newPass);
+
+        ApiClient.getApiService().changePassword(authHeader, request).enqueue(new Callback<ChangePasswordResponse>() {
             @Override
             public void onResponse(Call<ChangePasswordResponse> call, Response<ChangePasswordResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -255,7 +257,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                     Toast.makeText(ChangePasswordActivity.this, msg, Toast.LENGTH_LONG).show();
                     closeActivity();
                 } else {
-                    // Đọc lỗi chi tiết trả về từ Backend (Mật khẩu hiện tại sai hoặc trùng mật khẩu cũ)
+                    // Đọc thông báo lỗi chi tiết từ Backend (Mật khẩu hiện tại sai / trùng mật khẩu cũ / Token hết hạn)
                     try (ResponseBody errorBody = response.errorBody()) {
                         if (errorBody != null) {
                             String errJson = errorBody.string();
@@ -267,7 +269,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                         }
                     } catch (Exception ignored) {}
 
-                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thất bại. Mật khẩu hiện tại không đúng!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ChangePasswordActivity.this, "Đổi mật khẩu thất bại!", Toast.LENGTH_SHORT).show();
                 }
             }
 
