@@ -1,5 +1,6 @@
 package com.example.bookingmovietickets;
 
+import android.content.Intent;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -235,16 +236,25 @@ public class SignUpActivity extends AppCompatActivity {
         // 3. Đóng gói dữ liệu vào RegisterRequest
         RegisterRequest request = new RegisterRequest(fullName, email, password, phone, gender, formattedDob);
 
-        // 4. Gọi API Đăng ký người dùng qua Retrofit POST /api/users
+        // 4. Vô hiệu hóa nút Đăng Kí tạm thời tránh người dùng bấm 2 lần liên tiếp (Spam / Double Click)
+        if (btnSignUp != null) btnSignUp.setEnabled(false);
+
+        // Gọi API Đăng ký người dùng qua Retrofit POST /api/users
         ApiClient.getApiService().registerUser(request).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
+                if (btnSignUp != null) btnSignUp.setEnabled(true);
+
                 if (response.isSuccessful() && response.body() != null) {
                     RegisterResponse res = response.body();
                     String message = res.getThongBao() != null ? res.getThongBao() : "Đăng ký thành công!";
                     Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_SHORT).show();
 
-                    // Đăng ký thành công -> Đóng màn hình đăng ký và chuyển về Đăng nhập
+                    // Đăng ký thành công -> Chuyển sang màn hình nhập mã OTP kích hoạt tài khoản
+                    Intent intent = new Intent(SignUpActivity.this, VerifyCode.class);
+                    intent.putExtra(VerifyCode.EXTRA_EMAIL, email);
+                    intent.putExtra(VerifyCode.EXTRA_FLOW_TYPE, VerifyCode.FLOW_REGISTER);
+                    startActivity(intent);
                     finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
@@ -266,6 +276,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<RegisterResponse> call, Throwable t) {
+                if (btnSignUp != null) btnSignUp.setEnabled(true);
                 Toast.makeText(SignUpActivity.this, "Lỗi kết nối Server: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });

@@ -32,4 +32,16 @@ public interface ApiService {
         @Header("Authorization") String token,
         @Body ChangePasswordRequest request
     );
+
+    @POST("api/users/verify-otp")
+    Call<VerifyOtpResponse> verifyOtp(@Body VerifyOtpRequest request);
+
+    @POST("api/users/resend-otp")
+    Call<ResendOtpResponse> resendOtp(@Body ResendOtpRequest request);
+
+    @POST("api/users/forgot-pass")
+    Call<ResendOtpResponse> forgotPass(@Body ResendOtpRequest request);
+
+    @POST("api/users/reset-pass")
+    Call<ResetPassResponse> resetPass(@Body ResetPassRequest request);
 }

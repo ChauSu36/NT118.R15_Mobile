@@ -184,13 +184,41 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                 } else {
-                    // Đọc lỗi trả về từ Backend nếu có
+                    // Đọc lỗi trả về từ Backend (Mật khẩu sai hoặc Tài khoản chưa được kích hoạt OTP)
                     try (ResponseBody errorBody = response.errorBody()) {
                         if (errorBody != null) {
                             String errJson = errorBody.string();
                             LoginResponse errRes = new Gson().fromJson(errJson, LoginResponse.class);
                             if (errRes != null && errRes.getThongBao() != null && !errRes.getThongBao().isEmpty()) {
-                                Toast.makeText(MainActivity.this, errRes.getThongBao(), Toast.LENGTH_SHORT).show();
+                                String serverMsg = errRes.getThongBao();
+                                Toast.makeText(MainActivity.this, serverMsg, Toast.LENGTH_LONG).show();
+
+                                String lowerMsg = serverMsg.toLowerCase();
+                                // Nếu là thông báo chưa kích hoạt tài khoản OTP (mã 403) -> Gửi mã OTP mới và mở màn hình VerifyCode
+                                if (lowerMsg.contains("xác thực otp") || lowerMsg.contains("chưa được kích hoạt") || lowerMsg.contains("chưa kích hoạt") || response.code() == 403) {
+                                    ResendOtpRequest resendReq = new ResendOtpRequest(email);
+                                    ApiClient.getApiService().resendOtp(resendReq).enqueue(new Callback<ResendOtpResponse>() {
+                                        @Override
+                                        public void onResponse(Call<ResendOtpResponse> call, Response<ResendOtpResponse> resendResponse) {
+                                            Intent intent = new Intent(MainActivity.this, VerifyCode.class);
+                                            intent.putExtra(VerifyCode.EXTRA_EMAIL, email);
+                                            intent.putExtra(VerifyCode.EXTRA_FLOW_TYPE, VerifyCode.FLOW_REGISTER);
+                                            startActivity(intent);
+                                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResendOtpResponse> call, Throwable t) {
+                                            Intent intent = new Intent(MainActivity.this, VerifyCode.class);
+                                            intent.putExtra(VerifyCode.EXTRA_EMAIL, email);
+                                            intent.putExtra(VerifyCode.EXTRA_FLOW_TYPE, VerifyCode.FLOW_REGISTER);
+                                            startActivity(intent);
+                                            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+                                        }
+                                    });
+                                    return;
+                                }
+
                                 return;
                             }
                         }
