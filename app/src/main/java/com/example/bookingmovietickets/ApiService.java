@@ -20,12 +20,16 @@ public interface ApiService {
     @Multipart
     @POST("api/users/upload-avatar")
     Call<AvatarResponse> uploadAvatar(
+        @Header("Authorization") String token,
         @Part("user_id") RequestBody userId,
         @Part MultipartBody.Part avatar
     );
 
     @POST("api/users/update-profile")
-    Call<UpdateProfileResponse> updateProfile(@Body UpdateProfileRequest request);
+    Call<UpdateProfileResponse> updateProfile(
+        @Header("Authorization") String token,
+        @Body UpdateProfileRequest request
+    );
 
     @POST("api/users/change-password")
     Call<ChangePasswordResponse> changePassword(

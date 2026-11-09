@@ -21,6 +21,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +32,7 @@ import java.util.Locale;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -138,9 +140,13 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void uploadAvatarImage(Uri uri) {
-        int userId = SharedPrefManager.getInstance(this).getUserId();
-        if (userId == -1) {
-            userId = 1; // ID mặc định thử nghiệm nếu chưa đăng nhập
+        SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
+        int userId = prefManager.getUserId();
+        String jwtToken = prefManager.getJwtToken();
+
+        if (userId == -1 || jwtToken == null || jwtToken.isEmpty()) {
+            Toast.makeText(this, "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         File file = getFileFromUri(this, uri);
@@ -151,11 +157,12 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Toast.makeText(this, "Đang tải ảnh đại diện lên...", Toast.LENGTH_SHORT).show();
 
+        String authHeader = "Bearer " + jwtToken;
         RequestBody userIdPart = RequestBody.create(MediaType.parse("text/plain"), String.valueOf(userId));
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
         MultipartBody.Part avatarPart = MultipartBody.Part.createFormData("avatar", file.getName(), requestFile);
 
-        ApiClient.getApiService().uploadAvatar(userIdPart, avatarPart).enqueue(new Callback<AvatarResponse>() {
+        ApiClient.getApiService().uploadAvatar(authHeader, userIdPart, avatarPart).enqueue(new Callback<AvatarResponse>() {
             @Override
             public void onResponse(Call<AvatarResponse> call, Response<AvatarResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -258,17 +265,18 @@ public class EditProfileActivity extends AppCompatActivity {
             return;
         }
 
-        String newGender = "nam";
-        String displayGender = "Nam";
-        if (rgGender != null) {
-            int selectedId = rgGender.getCheckedRadioButtonId();
-            if (selectedId == R.id.rb_female) {
-                newGender = "nu";
-                displayGender = "Nữ";
-            } else if (selectedId == R.id.rb_other) {
-                newGender = "khac";
-                displayGender = "Khác";
-            }
+        final String newGender;
+        final String displayGender;
+        int selectedId = rgGender != null ? rgGender.getCheckedRadioButtonId() : -1;
+        if (selectedId == R.id.rb_female) {
+            newGender = "nu";
+            displayGender = "Nữ";
+        } else if (selectedId == R.id.rb_other) {
+            newGender = "khac";
+            displayGender = "Khác";
+        } else {
+            newGender = "nam";
+            displayGender = "Nam";
         }
 
         // Chuyển định dạng ngày sinh DD/MM/YYYY thành YYYY-MM-DD
@@ -282,30 +290,49 @@ public class EditProfileActivity extends AppCompatActivity {
 
         SharedPrefManager prefManager = SharedPrefManager.getInstance(this);
         int userId = prefManager.getUserId();
+        String jwtToken = prefManager.getJwtToken();
 
-        // 1. Lưu thông tin mới vào SharedPreferences cục bộ
-        prefManager.saveFullName(newFullName);
-        prefManager.savePhone(newPhone);
-        prefManager.saveGender(displayGender);
-        prefManager.saveDob(newDob);
+        if (userId == -1 || jwtToken == null || jwtToken.isEmpty()) {
+            Toast.makeText(this, "Phiên đăng nhập hết hạn, vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // 2. Gửi API cập nhật thông tin lên Server Database
+        // Gửi API cập nhật thông tin lên Server Database kèm JWT Token
+        String authHeader = "Bearer " + jwtToken;
         UpdateProfileRequest request = new UpdateProfileRequest(userId, newFullName, newPhone, newGender, formattedDob);
-        ApiClient.getApiService().updateProfile(request).enqueue(new Callback<UpdateProfileResponse>() {
+        ApiClient.getApiService().updateProfile(authHeader, request).enqueue(new Callback<UpdateProfileResponse>() {
             @Override
             public void onResponse(Call<UpdateProfileResponse> call, Response<UpdateProfileResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
-                    Toast.makeText(EditProfileActivity.this, "Cập nhật hồ sơ thành công!", Toast.LENGTH_SHORT).show();
+                    // Cập nhật SharedPreferences cục bộ thành công
+                    prefManager.saveFullName(newFullName);
+                    prefManager.savePhone(newPhone);
+                    prefManager.saveGender(displayGender);
+                    prefManager.saveDob(newDob);
+
+                    UpdateProfileResponse res = response.body();
+                    String msg = res.getThongBao() != null ? res.getThongBao() : "Cập nhật hồ sơ thành công!";
+                    Toast.makeText(EditProfileActivity.this, msg, Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
-                    Toast.makeText(EditProfileActivity.this, "Đã lưu hồ sơ thành công!", Toast.LENGTH_SHORT).show();
+                    try (ResponseBody errorBody = response.errorBody()) {
+                        if (errorBody != null) {
+                            String errJson = errorBody.string();
+                            UpdateProfileResponse errRes = new Gson().fromJson(errJson, UpdateProfileResponse.class);
+                            if (errRes != null && errRes.getThongBao() != null && !errRes.getThongBao().isEmpty()) {
+                                Toast.makeText(EditProfileActivity.this, errRes.getThongBao(), Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        }
+                    } catch (Exception ignored) {}
+
+                    Toast.makeText(EditProfileActivity.this, "Cập nhật hồ sơ thất bại (SĐT có thể đã bị trùng)!", Toast.LENGTH_LONG).show();
                 }
-                finish();
             }
 
             @Override
             public void onFailure(Call<UpdateProfileResponse> call, Throwable t) {
-                Toast.makeText(EditProfileActivity.this, "Đã lưu hồ sơ thành công!", Toast.LENGTH_SHORT).show();
-                finish();
+                Toast.makeText(EditProfileActivity.this, "Lỗi kết nối máy chủ: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

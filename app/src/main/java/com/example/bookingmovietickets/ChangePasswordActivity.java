@@ -236,17 +236,19 @@ public class ChangePasswordActivity extends AppCompatActivity {
             return;
         }
 
-        // 4. Lấy JWT Token từ SharedPrefManager
+        // 4. Lấy user_id và JWT Token từ SharedPrefManager
+        int userId = SharedPrefManager.getInstance(this).getUserId();
         String jwtToken = SharedPrefManager.getInstance(this).getJwtToken();
-        if (jwtToken == null || jwtToken.isEmpty()) {
+
+        if (userId == -1 || jwtToken == null || jwtToken.isEmpty()) {
             Toast.makeText(this, "Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String authHeader = "Bearer " + jwtToken;
 
-        // 5. Đóng gói dữ liệu (không cần user_id) và gọi API Đổi mật khẩu
-        ChangePasswordRequest request = new ChangePasswordRequest(currentPass, newPass);
+        // 5. Đóng gói dữ liệu (bao gồm cả user_id và mật khẩu) và gọi API Đổi mật khẩu
+        ChangePasswordRequest request = new ChangePasswordRequest(userId, currentPass, newPass);
 
         ApiClient.getApiService().changePassword(authHeader, request).enqueue(new Callback<ChangePasswordResponse>() {
             @Override
