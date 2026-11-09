@@ -10,6 +10,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -59,4 +60,7 @@ public interface ApiService {
 
     @GET("api/movies/coming-soon")
     Call<MovieResponse> getComingSoonMovies();
+
+    @GET("api/movies/search")
+    Call<MovieResponse> searchMovies(@Query("keyword") String keyword);
 }

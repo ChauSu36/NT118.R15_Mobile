@@ -2,7 +2,10 @@ package com.example.bookingmovietickets;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,12 +38,14 @@ public class HomeActivity extends AppCompatActivity {
     private LinearLayout layoutDots;
     private TextView tabNowShowing, tabComingSoon;
     private RecyclerView rvMovies;
+    private EditText etSearch;
 
     // ====== Dữ liệu ======
     private List<Banner> bannerList;
     private List<Movie> nowShowingList;
     private List<Movie> comingSoonList;
     private MovieAdapter movieAdapter;
+    private boolean isCurrentNowShowingTab = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         setupBanner();
         setupTabs();
         setupMovieList();
+        setupSearchLogic();
         setupBottomNav();
 
         // Tải danh sách phim từ Database MySQL qua API Backend (Now showing & Coming soon)
@@ -84,6 +90,7 @@ public class HomeActivity extends AppCompatActivity {
         tabNowShowing = findViewById(R.id.tab_now_showing);
         tabComingSoon = findViewById(R.id.tab_coming_soon);
         rvMovies = findViewById(R.id.rv_movies);
+        etSearch = findViewById(R.id.et_search);
     }
 
     private void loadDummyData() {
@@ -97,6 +104,49 @@ public class HomeActivity extends AppCompatActivity {
 
         nowShowingList = new ArrayList<>();
         comingSoonList = new ArrayList<>();
+    }
+
+    private void setupSearchLogic() {
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    String keyword = s.toString().trim();
+                    if (keyword.isEmpty()) {
+                        // Hiển thị lại danh sách phim theo tab hiện tại
+                        switchTab(isCurrentNowShowingTab);
+                    } else {
+                        // Gọi API Backend tìm kiếm trực tiếp từ MySQL Database
+                        performBackendSearch(keyword);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {}
+            });
+        }
+    }
+
+    private void performBackendSearch(String keyword) {
+        ApiClient.getApiService().searchMovies(keyword).enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Movie> searchResult = response.body().getDuLieu();
+                    if (searchResult != null) {
+                        movieAdapter.updateData(searchResult);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Lỗi kết nối tìm kiếm: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void fetchMoviesFromDatabase() {
@@ -241,6 +291,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void switchTab(boolean isNowShowing) {
+        isCurrentNowShowingTab = isNowShowing;
         if (isNowShowing) {
             tabNowShowing.setBackgroundResource(R.drawable.bg_tab_active);
             tabNowShowing.setTextColor(getColor(android.R.color.white));

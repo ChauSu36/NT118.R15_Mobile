@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
@@ -20,12 +21,43 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         void onMovieClick(Movie movie);
     }
 
-    private final List<Movie> movieList;
+    private List<Movie> movieList;
+    private List<Movie> originalList;
     private final OnMovieClickListener listener;
 
     public MovieAdapter(List<Movie> movieList, OnMovieClickListener listener) {
         this.movieList = movieList;
+        this.originalList = new ArrayList<>(movieList);
         this.listener = listener;
+    }
+
+    /** Cập nhật dữ liệu mới từ API khi chuyển tab hoặc tải lại */
+    public void updateData(List<Movie> newList) {
+        this.movieList = newList;
+        this.originalList = new ArrayList<>(newList);
+        notifyDataSetChanged();
+    }
+
+    /** Lọc danh sách phim theo từ khóa tên hoặc thể loại */
+    public void filterList(String query) {
+        List<Movie> filteredList = new ArrayList<>();
+
+        if (query == null || query.trim().isEmpty()) {
+            filteredList.addAll(originalList);
+        } else {
+            String pattern = query.toLowerCase().trim();
+            for (Movie movie : originalList) {
+                boolean matchTitle = movie.getTitle() != null && movie.getTitle().toLowerCase().contains(pattern);
+                boolean matchGenre = movie.getGenre() != null && movie.getGenre().toLowerCase().contains(pattern);
+
+                if (matchTitle || matchGenre) {
+                    filteredList.add(movie);
+                }
+            }
+        }
+
+        this.movieList = filteredList;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -83,7 +115,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        return movieList != null ? movieList.size() : 0;
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
