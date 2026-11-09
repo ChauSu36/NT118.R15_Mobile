@@ -63,4 +63,11 @@ public interface ApiService {
 
     @GET("api/movies/search")
     Call<MovieResponse> searchMovies(@Query("keyword") String keyword);
+
+    @GET("api/movies/filter")
+    Call<MovieResponse> filterMovies(
+        @Query("status") String status,
+        @Query("genre") String genre,
+        @Query("year") Integer year
+    );
 }

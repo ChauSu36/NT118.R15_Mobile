@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.ChipGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tabNowShowing, tabComingSoon;
     private RecyclerView rvMovies;
     private EditText etSearch;
+    private View btnFilter;
 
     // ====== Dữ liệu ======
     private List<Banner> bannerList;
@@ -69,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         setupTabs();
         setupMovieList();
         setupSearchLogic();
+        setupFilterButton();
         setupBottomNav();
 
         // Tải danh sách phim từ Database MySQL qua API Backend (Now showing & Coming soon)
@@ -91,6 +96,7 @@ public class HomeActivity extends AppCompatActivity {
         tabComingSoon = findViewById(R.id.tab_coming_soon);
         rvMovies = findViewById(R.id.rv_movies);
         etSearch = findViewById(R.id.et_search);
+        btnFilter = findViewById(R.id.btn_filter);
     }
 
     private void loadDummyData() {
@@ -145,6 +151,94 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<MovieResponse> call, Throwable t) {
                 Toast.makeText(HomeActivity.this, "Lỗi kết nối tìm kiếm: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupFilterButton() {
+        if (btnFilter != null) {
+            btnFilter.setOnClickListener(v -> showFilterBottomSheetDialog());
+        }
+    }
+
+    private void showFilterBottomSheetDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_filter_movie, null);
+        bottomSheetDialog.setContentView(dialogView);
+
+        ChipGroup cgGenre = dialogView.findViewById(R.id.cg_genre);
+        ChipGroup cgYear = dialogView.findViewById(R.id.cg_year);
+        ChipGroup cgStatus = dialogView.findViewById(R.id.cg_status);
+        View btnReset = dialogView.findViewById(R.id.btn_reset_filter);
+        Button btnApply = dialogView.findViewById(R.id.btn_apply_filter);
+
+        if (btnReset != null) {
+            btnReset.setOnClickListener(v -> {
+                if (cgGenre != null) cgGenre.check(R.id.chip_genre_all);
+                if (cgYear != null) cgYear.check(R.id.chip_year_all);
+                if (cgStatus != null) cgStatus.check(R.id.chip_status_all);
+            });
+        }
+
+        if (btnApply != null) {
+            btnApply.setOnClickListener(v -> {
+                String genre = null;
+                Integer year = null;
+                String status = null;
+
+                // 1. Đọc thể loại
+                if (cgGenre != null) {
+                    int genreId = cgGenre.getCheckedChipId();
+                    if (genreId == R.id.chip_genre_action) genre = "Hành Động";
+                    else if (genreId == R.id.chip_genre_horror) genre = "Kinh Dị";
+                    else if (genreId == R.id.chip_genre_romance) genre = "Tình cảm";
+                    else if (genreId == R.id.chip_genre_comedy) genre = "Hài";
+                    else if (genreId == R.id.chip_genre_animation) genre = "Hoạt hình";
+                    else if (genreId == R.id.chip_genre_drama) genre = "Tâm lý";
+                }
+
+                // 2. Đọc năm phát hành
+                if (cgYear != null) {
+                    int yearId = cgYear.getCheckedChipId();
+                    if (yearId == R.id.chip_year_2026) year = 2026;
+                    else if (yearId == R.id.chip_year_2025) year = 2025;
+                    else if (yearId == R.id.chip_year_2024) year = 2024;
+                }
+
+                // 3. Đọc trạng thái
+                if (cgStatus != null) {
+                    int statusId = cgStatus.getCheckedChipId();
+                    if (statusId == R.id.chip_status_now) status = "now_showing";
+                    else if (statusId == R.id.chip_status_coming) status = "coming_soon";
+                }
+
+                bottomSheetDialog.dismiss();
+                performBackendFilter(status, genre, year);
+            });
+        }
+
+        bottomSheetDialog.show();
+    }
+
+    private void performBackendFilter(String status, String genre, Integer year) {
+        ApiClient.getApiService().filterMovies(status, genre, year).enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Movie> filteredList = response.body().getDuLieu();
+                    if (filteredList != null && !filteredList.isEmpty()) {
+                        movieAdapter.updateData(filteredList);
+                    } else {
+                        Toast.makeText(HomeActivity.this, "Không tìm thấy phim phù hợp!", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(HomeActivity.this, "Lọc phim thất bại!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Lỗi kết nối lọc phim: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
