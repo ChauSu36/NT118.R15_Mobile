@@ -1,9 +1,11 @@
 package com.example.bookingmovietickets;
 
+import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -48,4 +50,13 @@ public interface ApiService {
 
     @POST("api/users/reset-pass")
     Call<ResetPassResponse> resetPass(@Body ResetPassRequest request);
+
+    @GET("api/movies")
+    Call<List<Movie>> getMovies();
+
+    @GET("api/movies/now-showing")
+    Call<MovieResponse> getNowShowingMovies();
+
+    @GET("api/movies/coming-soon")
+    Call<MovieResponse> getComingSoonMovies();
 }

@@ -4,10 +4,13 @@ import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -40,6 +43,16 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
         holder.tvTitle.setText(banner.getTitle());
         holder.tvSubtitle.setText(banner.getSubtitle());
 
+        // Tải ảnh poster nền cho banner qua Glide
+        if (banner.getPosterUrl() != null && !banner.getPosterUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(banner.getPosterUrl())
+                    .centerCrop()
+                    .into(holder.imgBannerPoster);
+        } else {
+            holder.imgBannerPoster.setImageResource(R.color.color_poster_placeholder);
+        }
+
         holder.btnDetail.setPaintFlags(
                 holder.btnDetail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
@@ -62,10 +75,12 @@ public class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.BannerView
     }
 
     static class BannerViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgBannerPoster;
         TextView tvBadge, tvTitle, tvSubtitle, btnDetail;
 
         BannerViewHolder(@NonNull View itemView) {
             super(itemView);
+            imgBannerPoster = itemView.findViewById(R.id.img_banner_poster);
             tvBadge = itemView.findViewById(R.id.tv_badge);
             tvTitle = itemView.findViewById(R.id.tv_banner_title);
             tvSubtitle = itemView.findViewById(R.id.tv_banner_subtitle);

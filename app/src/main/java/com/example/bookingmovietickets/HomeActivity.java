@@ -22,6 +22,10 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity {
 
     // ====== View ======
@@ -60,6 +64,9 @@ public class HomeActivity extends AppCompatActivity {
         setupTabs();
         setupMovieList();
         setupBottomNav();
+
+        // Tải danh sách phim từ Database MySQL qua API Backend (Now showing & Coming soon)
+        fetchMoviesFromDatabase();
     }
 
     @Override
@@ -89,10 +96,58 @@ public class HomeActivity extends AppCompatActivity {
                 "Gia đình, Tâm lý, Hài • 138p"));
 
         nowShowingList = new ArrayList<>();
-        nowShowingList.add(new Movie("MAI (2024)", "Tình cảm • 131p", "C16", "4.8"));
-        nowShowingList.add(new Movie("KUNG FU PANDA 4", "Hoạt hình • 94p", "P", "4.5"));
-
         comingSoonList = new ArrayList<>();
+    }
+
+    private void fetchMoviesFromDatabase() {
+        // 1. Gọi API lấy phim đang chiếu (/api/movies/now-showing)
+        ApiClient.getApiService().getNowShowingMovies().enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Movie> list = response.body().getDuLieu();
+                    if (list != null && !list.isEmpty()) {
+                        nowShowingList.clear();
+                        nowShowingList.addAll(list);
+
+                        // Cập nhật Banner top từ phim đang chiếu kèm posterUrl thật
+                        bannerList.clear();
+                        for (int i = 0; i < Math.min(3, list.size()); i++) {
+                            Movie m = list.get(i);
+                            bannerList.add(new Banner("HOT PHIM THÁNG", m.getTitle(), m.getGenreAndDuration(), m.getPosterUrl()));
+                        }
+                        setupBanner();
+
+                        // Hiển thị danh sách lên RecyclerView mặc định tab Đang chiếu
+                        switchTab(true);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Lỗi tải phim đang chiếu: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 2. Gọi API lấy phim sắp chiếu (/api/movies/coming-soon)
+        ApiClient.getApiService().getComingSoonMovies().enqueue(new Callback<MovieResponse>() {
+            @Override
+            public void onResponse(Call<MovieResponse> call, Response<MovieResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    List<Movie> list = response.body().getDuLieu();
+                    if (list != null) {
+                        comingSoonList.clear();
+                        comingSoonList.addAll(list);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MovieResponse> call, Throwable t) {
+                // Không bắt buộc lỗi sắp chiếu
+            }
+        });
     }
 
     private void setupHeader() {

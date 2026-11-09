@@ -5,8 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
 
-    // IP Wifi thực tế của máy Mac: 192.168.2.198 (cổng 8080)
-    private static final String BASE_URL = "http://192.168.2.198:8080/";
+    private static final String BASE_URL = "https://api-mobile.chausu.name.vn/";
     private static Retrofit retrofit = null;
 
     public static ApiService getApiService() {

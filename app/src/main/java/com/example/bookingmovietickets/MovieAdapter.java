@@ -3,10 +3,13 @@ package com.example.bookingmovietickets;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -40,12 +43,29 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         holder.tvTitle.setText(movie.getTitle());
         holder.tvSubtitle.setText(movie.getGenreAndDuration());
         holder.tvRating.setText("★ " + movie.getRating());
-        holder.tvAge.setText(movie.getAgeRating());
 
-        if ("C16".equals(movie.getAgeRating())) {
-            holder.tvAge.setBackgroundResource(R.drawable.bg_badge_age_c16);
+        if (movie.getAgeRating() != null && !movie.getAgeRating().isEmpty()) {
+            holder.tvAge.setText(movie.getAgeRating());
+            holder.tvAge.setVisibility(View.VISIBLE);
+            if ("C16".equals(movie.getAgeRating()) || "T16".equals(movie.getAgeRating()) || "T18".equals(movie.getAgeRating())) {
+                holder.tvAge.setBackgroundResource(R.drawable.bg_badge_age_c16);
+            } else {
+                holder.tvAge.setBackgroundResource(R.drawable.bg_badge_age_p);
+            }
         } else {
-            holder.tvAge.setBackgroundResource(R.drawable.bg_badge_age_p);
+            holder.tvAge.setVisibility(View.GONE);
+        }
+
+        // Tải ảnh poster từ Database MySQL qua Glide
+        if (movie.getPosterUrl() != null && !movie.getPosterUrl().isEmpty()) {
+            Glide.with(holder.itemView.getContext())
+                    .load(movie.getPosterUrl())
+                    .placeholder(R.color.color_poster_placeholder)
+                    .error(R.color.color_poster_placeholder)
+                    .centerCrop()
+                    .into(holder.imgPoster);
+        } else {
+            holder.imgPoster.setImageResource(R.color.color_poster_placeholder);
         }
 
         holder.btnDetail.setOnClickListener(v -> {
@@ -67,10 +87,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     }
 
     static class MovieViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgPoster;
         TextView tvTitle, tvSubtitle, tvAge, tvRating, btnDetail;
 
         MovieViewHolder(@NonNull View itemView) {
             super(itemView);
+            imgPoster = itemView.findViewById(R.id.img_poster);
             tvTitle = itemView.findViewById(R.id.tv_title);
             tvSubtitle = itemView.findViewById(R.id.tv_subtitle);
             tvAge = itemView.findViewById(R.id.tv_age);
